@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0e1a;
+  --foreground: #e2e8f0;
+  --accent: #38bdf8;
+  --accent-dim: #0ea5e9;
+  --surface: #111827;
+  --surface-2: #1e293b;
+  --border: #334155;
+  --match-color: #22c55e;
+  --mismatch-color: #f97316;
+  --gap-color: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* DP Table cell animations */
+@keyframes cell-fill {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.dp-cell-animate {
+  animation: cell-fill 0.12s ease forwards;
+}
