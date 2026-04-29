@@ -68,9 +68,10 @@ class AlignResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 def _parse_sequence(raw: str) -> str:
-    """Strip FASTA headers and whitespace, returning a clean sequence string."""
+    """Strip FASTA headers and all whitespace, returning a clean sequence string."""
     lines = raw.strip().splitlines()
-    seq_lines = [ln.strip() for ln in lines if not ln.startswith(">")]
+    # Remove header lines and then remove all whitespace from sequence lines
+    seq_lines = ["".join(ln.split()) for ln in lines if not ln.startswith(">")]
     return "".join(seq_lines).upper()
 
 
@@ -96,7 +97,7 @@ def _run_align(algo_module, request: AlignRequest, algorithm_name: str) -> Align
     # Truncate dp_table for large sequences to avoid huge payloads
     dp = result.get("dp_table")
     if dp and len(dp) > 51:
-        dp = None  # frontend visualiser only supports ≤ 50 anyway
+        dp = None  # frontend visualizer only supports ≤ 50 anyway
 
     return AlignResponse(
         algorithm=algorithm_name,
@@ -146,7 +147,7 @@ def align_local(req: AlignRequest):
 
 @app.post("/api/align/optimized", response_model=AlignResponse, tags=["Alignment"])
 def align_optimized(req: AlignRequest):
-    """Hirschberg space-optimised global alignment."""
+    """Hirschberg space-optimized global alignment."""
     try:
         return _run_align(hirschberg, req, "hirschberg")
     except Exception as exc:
@@ -180,11 +181,13 @@ async def parse_fasta(file: UploadFile = File(...)):
         line = line.strip()
         if line.startswith(">"):
             if current_header is not None:
-                sequences.append({"header": current_header, "sequence": "".join(current_seq).upper()})
+                clean_seq = "".join("".join(current_seq).split()).upper()
+                sequences.append({"header": current_header, "sequence": clean_seq})
             current_header = line[1:]
             current_seq = []
         else:
             current_seq.append(line)
     if current_header is not None:
-        sequences.append({"header": current_header, "sequence": "".join(current_seq).upper()})
+        clean_seq = "".join("".join(current_seq).split()).upper()
+        sequences.append({"header": current_header, "sequence": clean_seq})
     return {"sequences": sequences, "count": len(sequences)}

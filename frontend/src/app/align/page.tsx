@@ -9,7 +9,7 @@ import DPTableVisualizer from '@/components/ui/DPTableVisualizer';
 const ALGO_OPTIONS: { value: Algorithm; label: string; desc: string }[] = [
   { value: 'global',    label: 'Needleman-Wunsch',  desc: 'Global alignment · O(m×n) space' },
   { value: 'local',     label: 'Smith-Waterman',    desc: 'Local alignment · O(m×n) space' },
-  { value: 'optimized', label: "Hirschberg's",       desc: 'Space-optimised global · O(n) space' },
+  { value: 'optimized', label: "Hirschberg's",       desc: 'Space-optimized global · O(n) space' },
   { value: 'all',       label: 'Compare All Three',  desc: 'Runs all algorithms side by side' },
 ];
 

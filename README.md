@@ -8,13 +8,13 @@ An educational "white-box" web application for biological sequence alignment, bu
 BetterMatch/
 ├── algorithms/      Python FastAPI microservice — NW · SW · Hirschberg's
 ├── backend/         NestJS REST API — proxies to Python, stores results in PostgreSQL
-├── frontend/        Next.js 14 (App Router + Tailwind) — UI & DP Table Visualizer
+├── frontend/        Next.js 16 (App Router + Tailwind) — UI & DP Table Visualizer
 └── docker-compose.yml
 ```
 
 | Service    | Port | Stack |
 |------------|------|-------|
-| frontend   | 3000 | Next.js 14, Tailwind CSS |
+| frontend   | 3000 | Next.js 16, Tailwind CSS |
 | backend    | 4000 | NestJS 10, TypeORM, PostgreSQL |
 | algorithms | 8000 | Python 3.12, FastAPI, uvicorn |
 | postgres   | 5432 | PostgreSQL 16 |
