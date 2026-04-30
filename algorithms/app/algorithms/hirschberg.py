@@ -27,9 +27,9 @@ def _nw_score_row(
     """Return the final row of NW scores using only O(n) space."""
     n = len(seq_b)
     prev = [j * gap for j in range(n + 1)]
+    curr = [0] * (n + 1)
 
     for i in range(1, len(seq_a) + 1):
-        curr = [0] * (n + 1)
         curr[0] = i * gap
         for j in range(1, n + 1):
             s = get_score(seq_a[i - 1], seq_b[j - 1], match, mismatch, matrix)
@@ -38,8 +38,9 @@ def _nw_score_row(
                 prev[j] + gap,
                 curr[j - 1] + gap,
             )
-        prev = curr
-
+        # Swap rows to reuse the memory
+        prev[:] = curr
+    
     return prev
 
 

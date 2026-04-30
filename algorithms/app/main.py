@@ -3,6 +3,7 @@
 import time
 import tracemalloc
 import io
+import re
 from typing import Annotated, Literal, Union
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
@@ -61,6 +62,7 @@ class AlignResponse(BaseModel):
     peak_memory_kb: float
     dp_table: Union[list[list[int]], None] = None
     max_pos: Union[list[int], None] = None
+    summary: str = Field("", description="Human-readable summary of the alignment")
 
 
 # ---------------------------------------------------------------------------
@@ -68,11 +70,13 @@ class AlignResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 def _parse_sequence(raw: str) -> str:
-    """Strip FASTA headers and all whitespace, returning a clean sequence string."""
+    """Strip FASTA headers, remove non-alphabetical characters, and return uppercase."""
     lines = raw.strip().splitlines()
-    # Remove header lines and then remove all whitespace from sequence lines
-    seq_lines = ["".join(ln.split()) for ln in lines if not ln.startswith(">")]
-    return "".join(seq_lines).upper()
+    # Remove header lines
+    seq_lines = [ln for ln in lines if not ln.startswith(">")]
+    # Join and then use regex to keep only A-Z
+    full_text = "".join(seq_lines).upper()
+    return re.sub(r"[^A-Z]", "", full_text)
 
 
 def _run_align(algo_module, request: AlignRequest, algorithm_name: str) -> AlignResponse:
@@ -99,6 +103,13 @@ def _run_align(algo_module, request: AlignRequest, algorithm_name: str) -> Align
     if dp and len(dp) > 51:
         dp = None  # frontend visualizer only supports ≤ 50 anyway
 
+    # Generate a human-readable summary
+    summary = (
+        f"{result['matches']} matches, {result['mismatches']} mismatches, "
+        f"{result['gaps']} gaps ({result['identity']}% identity). "
+        f"Score: {result['score']}."
+    )
+
     return AlignResponse(
         algorithm=algorithm_name,
         score=result["score"],
@@ -115,6 +126,7 @@ def _run_align(algo_module, request: AlignRequest, algorithm_name: str) -> Align
         peak_memory_kb=round(peak / 1024, 2),
         dp_table=dp,
         max_pos=result.get("max_pos"),
+        summary=summary,
     )
 
 

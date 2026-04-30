@@ -48,12 +48,13 @@ def align(
                 i -= 1
                 j -= 1
                 continue
+        
         if i > 0 and dp[i][j] == dp[i - 1][j] + gap:
             aligned_a.append(seq_a[i - 1])
             aligned_b.append("-")
             ops.append("D")
             i -= 1
-        else:
+        elif j > 0:
             aligned_a.append("-")
             aligned_b.append(seq_b[j - 1])
             ops.append("I")

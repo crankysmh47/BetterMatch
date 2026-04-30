@@ -53,11 +53,14 @@ def align(
             aligned_b.append("-")
             ops.append("D")
             i -= 1
-        else:
+        elif dp[i][j] == dp[i][j - 1] + gap:
             aligned_a.append("-")
             aligned_b.append(seq_b[j - 1])
             ops.append("I")
             j -= 1
+        else:
+            # Should not happen if dp logic is correct, but for robustness:
+            break
 
     aligned_a = "".join(reversed(aligned_a))
     aligned_b = "".join(reversed(aligned_b))
