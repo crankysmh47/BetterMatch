@@ -1,30 +1,13 @@
 services:
-  # ── PostgreSQL ──────────────────────────────────────────────────────────────
-  postgres:
-    image: postgres:16-alpine
-    container_name: bettermatch-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-bettermatch}
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-postgres}']
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  # ── Python Algorithms Microservice ─────────────────────────────────────────
   algorithms:
     build:
-      context: ./algorithms
+      context: ./apps/api
       dockerfile: Dockerfile
     container_name: bettermatch-algorithms
     restart: unless-stopped
+    environment:
+      # Optional: CORS_ORIGINS=http://localhost:3000
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
     ports:
       - '8000:8000'
     healthcheck:
@@ -33,44 +16,18 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── NestJS Backend ──────────────────────────────────────────────────────────
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: bettermatch-backend
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      algorithms:
-        condition: service_healthy
-    environment:
-      PORT: 4000
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_NAME: ${DB_NAME:-bettermatch}
-      ALGO_SERVICE_URL: http://algorithms:8000
-    ports:
-      - '4000:4000'
-
-  # ── Next.js Frontend ────────────────────────────────────────────────────────
   frontend:
     build:
-      context: ./frontend
+      context: ./apps/web
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:4000/api
+        NEXT_PUBLIC_API_URL: http://localhost:8000/api
     container_name: bettermatch-frontend
     restart: unless-stopped
     depends_on:
-      - backend
+      algorithms:
+        condition: service_healthy
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:4000/api
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api
     ports:
       - '3000:3000'
-
-volumes:
-  postgres_data:

@@ -1,0 +1,285 @@
+{
+  "parameters": {
+    "nw_sw_gap_linear_protein": -10,
+    "gotoh_gap_open": -11,
+    "gotoh_gap_extend": -1,
+    "substitution_matrix": "BLOSUM62"
+  },
+  "experiment1_original_vs_delta": {
+    "algorithm": "Needleman-Wunsch",
+    "score": 5888,
+    "identity_pct": 97.6617,
+    "similarity_pct": 97.6617,
+    "gap_pct": 1.4809,
+    "substitutions_vs_original_positions": [
+      {
+        "ref_pos_wuhan_aa": 19,
+        "wuhan_aa": "T",
+        "variant_aa": "R"
+      },
+      {
+        "ref_pos_wuhan_aa": 95,
+        "wuhan_aa": "T",
+        "variant_aa": "X"
+      },
+      {
+        "ref_pos_wuhan_aa": 142,
+        "wuhan_aa": "G",
+        "variant_aa": "D"
+      },
+      {
+        "ref_pos_wuhan_aa": 156,
+        "wuhan_aa": "E",
+        "variant_aa": "X"
+      },
+      {
+        "ref_pos_wuhan_aa": 157,
+        "wuhan_aa": "F",
+        "variant_aa": "X"
+      },
+      {
+        "ref_pos_wuhan_aa": 158,
+        "wuhan_aa": "R",
+        "variant_aa": "X"
+      },
+      {
+        "ref_pos_wuhan_aa": 452,
+        "wuhan_aa": "L",
+        "variant_aa": "R"
+      },
+      {
+        "ref_pos_wuhan_aa": 478,
+        "wuhan_aa": "T",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 614,
+        "wuhan_aa": "D",
+        "variant_aa": "G"
+      },
+      {
+        "ref_pos_wuhan_aa": 681,
+        "wuhan_aa": "P",
+        "variant_aa": "R"
+      },
+      {
+        "ref_pos_wuhan_aa": 950,
+        "wuhan_aa": "D",
+        "variant_aa": "N"
+      }
+    ],
+    "substitutions_vs_original_positions_truncated_after": null,
+    "substitution_count": 11,
+    "indel_related_gap_symbols_in_alignment": 19
+  },
+  "experiment2_original_vs_omicron": {
+    "algorithm": "Needleman-Wunsch",
+    "score": 5367,
+    "identity_pct": 93.1591,
+    "similarity_pct": 93.6972,
+    "gap_pct": 4.2275,
+    "substitution_count": 34,
+    "substitutions_vs_original_positions": [
+      {
+        "ref_pos_wuhan_aa": 68,
+        "wuhan_aa": "I",
+        "variant_aa": "V"
+      },
+      {
+        "ref_pos_wuhan_aa": 70,
+        "wuhan_aa": "V",
+        "variant_aa": "I"
+      },
+      {
+        "ref_pos_wuhan_aa": 95,
+        "wuhan_aa": "T",
+        "variant_aa": "I"
+      },
+      {
+        "ref_pos_wuhan_aa": 142,
+        "wuhan_aa": "G",
+        "variant_aa": "D"
+      },
+      {
+        "ref_pos_wuhan_aa": 211,
+        "wuhan_aa": "N",
+        "variant_aa": "I"
+      },
+      {
+        "ref_pos_wuhan_aa": 212,
+        "wuhan_aa": "L",
+        "variant_aa": "V"
+      },
+      {
+        "ref_pos_wuhan_aa": 213,
+        "wuhan_aa": "V",
+        "variant_aa": "P"
+      },
+      {
+        "ref_pos_wuhan_aa": 214,
+        "wuhan_aa": "R",
+        "variant_aa": "E"
+      },
+      {
+        "ref_pos_wuhan_aa": 339,
+        "wuhan_aa": "G",
+        "variant_aa": "D"
+      },
+      {
+        "ref_pos_wuhan_aa": 371,
+        "wuhan_aa": "S",
+        "variant_aa": "L"
+      },
+      {
+        "ref_pos_wuhan_aa": 373,
+        "wuhan_aa": "S",
+        "variant_aa": "P"
+      },
+      {
+        "ref_pos_wuhan_aa": 375,
+        "wuhan_aa": "S",
+        "variant_aa": "F"
+      },
+      {
+        "ref_pos_wuhan_aa": 417,
+        "wuhan_aa": "K",
+        "variant_aa": "N"
+      },
+      {
+        "ref_pos_wuhan_aa": 440,
+        "wuhan_aa": "N",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 446,
+        "wuhan_aa": "G",
+        "variant_aa": "S"
+      },
+      {
+        "ref_pos_wuhan_aa": 477,
+        "wuhan_aa": "S",
+        "variant_aa": "N"
+      },
+      {
+        "ref_pos_wuhan_aa": 478,
+        "wuhan_aa": "T",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 484,
+        "wuhan_aa": "E",
+        "variant_aa": "A"
+      },
+      {
+        "ref_pos_wuhan_aa": 493,
+        "wuhan_aa": "Q",
+        "variant_aa": "R"
+      },
+      {
+        "ref_pos_wuhan_aa": 496,
+        "wuhan_aa": "G",
+        "variant_aa": "S"
+      },
+      {
+        "ref_pos_wuhan_aa": 498,
+        "wuhan_aa": "Q",
+        "variant_aa": "R"
+      },
+      {
+        "ref_pos_wuhan_aa": 501,
+        "wuhan_aa": "N",
+        "variant_aa": "Y"
+      },
+      {
+        "ref_pos_wuhan_aa": 505,
+        "wuhan_aa": "Y",
+        "variant_aa": "H"
+      },
+      {
+        "ref_pos_wuhan_aa": 547,
+        "wuhan_aa": "T",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 614,
+        "wuhan_aa": "D",
+        "variant_aa": "G"
+      },
+      {
+        "ref_pos_wuhan_aa": 655,
+        "wuhan_aa": "H",
+        "variant_aa": "Y"
+      },
+      {
+        "ref_pos_wuhan_aa": 679,
+        "wuhan_aa": "N",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 681,
+        "wuhan_aa": "P",
+        "variant_aa": "H"
+      },
+      {
+        "ref_pos_wuhan_aa": 764,
+        "wuhan_aa": "N",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 796,
+        "wuhan_aa": "D",
+        "variant_aa": "Y"
+      },
+      {
+        "ref_pos_wuhan_aa": 856,
+        "wuhan_aa": "N",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 954,
+        "wuhan_aa": "Q",
+        "variant_aa": "H"
+      },
+      {
+        "ref_pos_wuhan_aa": 969,
+        "wuhan_aa": "N",
+        "variant_aa": "K"
+      },
+      {
+        "ref_pos_wuhan_aa": 981,
+        "wuhan_aa": "L",
+        "variant_aa": "F"
+      }
+    ],
+    "substitutions_vs_original_positions_truncated_after": null,
+    "comparison": {
+      "delta_substitutions_vs_original_aa_positions": 11,
+      "omicron_substitutions_vs_original_aa_positions": 34,
+      "omicron_has_more_substitutions_than_delta": true
+    }
+  },
+  "experiment3_insulin_nw_vs_gotoh": {
+    "nw": {
+      "score": 466,
+      "identity_pct": 81.8182,
+      "gap_pct": 0.0,
+      "max_contiguous_identity_run_aa": 25
+    },
+    "gotoh": {
+      "score": 466.0,
+      "identity_pct": 81.8182,
+      "gap_pct": 0.0,
+      "max_contiguous_identity_run_aa": 25
+    }
+  },
+  "experiment4_insulin_smith_waterman": {
+    "score": 466,
+    "identity_pct": 81.6514,
+    "aligned_human_fragment": "MALWMRLLPLLALLALWGPDPAAAFVNQHLCGSHLVEALYLVCGERGFFYTPKTRREAEDLQVGQVELGGGPGAGSLQPLALEGSLQKRGIVEQCCTSICSLYQLENYC",
+    "aligned_mouse_fragment": "MALWMRFLPLLALLFLWESHPTQAFVKQHLCGSHLVEALYLVCGERGFFYTPMSRREVEDPQVAQLELGGGPGAGDLQTLALEVAQQKRGIVDQCCTSICSLYQLENYC",
+    "interpretation_hint": "Inspect contiguous conserved motif vs textbook insulin A/B chains / signal+B+C+A topology (sequences here are UniProt precursors ~110 aa)."
+  },
+  "dataset_notes": {
+    "reference_header_original_spike": "MN908947.3_spike_S_prot|SARS-CoV-2 Wuhan-Hu-1 spike CDS MN908947.3:21563-25384 translated"
+  }
+}

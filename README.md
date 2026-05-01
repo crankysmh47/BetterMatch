@@ -1,100 +1,148 @@
 # BetterMatch — Sequence Alignment Visualizer
 
-An educational "white-box" web application for biological sequence alignment, built as a DAA (Design and Analysis of Algorithms) project.
+An educational “white-box” web application for biological sequence alignment, built as a DAA (Design and Analysis of Algorithms) project.
 
-## Architecture
+## Repository layout
 
 ```
 BetterMatch/
-├── algorithms/      Python FastAPI microservice — NW · SW · Hirschberg's
-├── backend/         NestJS REST API — proxies to Python, stores results in PostgreSQL
-├── frontend/        Next.js 16 (App Router + Tailwind) — UI & DP Table Visualizer
-└── docker-compose.yml
+├── apps/
+│   ├── api/           Python FastAPI — NW · SW · Hirschberg · Gotoh · Banded NW · benchmarks
+│   └── web/           Next.js 16 (App Router + Tailwind) — UI & DP table visualizer
+├── datasets/          Biological FASTAs, synthetic pairs, experiment scripts
+├── docs/
+│   ├── spec/          Course specification (`genalign_full_spec.html`)
+│   ├── CORRECTNESS_PROOFS.md
+│   └── QA_CHECKLIST.md
+├── hf-space/          Dockerfile + README for Hugging Face Spaces (API image only)
+├── scripts/           Small Node helpers (spec task IDs, verified-marker emission)
+├── docker-compose.yml
+└── README.md
 ```
 
-| Service    | Port | Stack |
-|------------|------|-------|
-| frontend   | 3000 | Next.js 16, Tailwind CSS |
-| backend    | 4000 | NestJS 10, TypeORM, PostgreSQL |
-| algorithms | 8000 | Python 3.12, FastAPI, uvicorn |
-| postgres   | 5432 | PostgreSQL 16 |
+| Deploy target | Role |
+|---------------|------|
+| **Vercel** | Next.js app in `apps/web` (`NEXT_PUBLIC_API_URL` → HF Space `/api`) |
+| **Hugging Face Space** | Docker image from `hf-space/Dockerfile`; public FastAPI |
+| **Local** | `docker compose` — **web 3000**, **API 8000** |
 
-## Quick Start (Docker — Recommended)
+There is **no NestJS** layer: the browser calls FastAPI directly. Alignment history is stored in **localStorage** until/unless you add a backend store.
+
+## Quick start (Docker — recommended)
 
 ```bash
-# From the BetterMatch/ directory
+# From the repository root
 docker compose up --build
 ```
 
-Then open http://localhost:3000
+Open http://localhost:3000 (the web container uses `NEXT_PUBLIC_API_URL=http://localhost:8000/api`).
 
-## Local Development
+### Docker prerequisites (Windows)
 
-### 1. PostgreSQL
+If you see `open //./pipe/dockerDesktopLinuxEngine`:
+
+- Start **Docker Desktop** with **Linux containers + WSL2**.
+- Check: `docker info` and `docker compose version`.
+
+## Deployment
+
+### Hugging Face (API)
+
+1. Create a **Docker** Space from this repo.
+2. Set **Dockerfile path** to `hf-space/Dockerfile` (build context = repository root).
+3. Set **`CORS_ORIGINS`** to your Vercel origin(s), comma-separated, e.g. `https://your-app.vercel.app`.
+
+### Vercel (web)
+
+1. Point the Vercel project root at **`apps/web`** (or deploy from that directory).
+2. Set **`NEXT_PUBLIC_API_URL`** = `https://<your-space>.hf.space/api` (must include `/api`, no trailing slash).
+
+See **`apps/web/.env.example`** and **`hf-space/README.md`**.
+
+## Local development
+
+### 1. API (`apps/api`)
+
 ```bash
-docker compose up postgres -d
-```
-
-### 2. Algorithms service
-```bash
-cd algorithms
+cd apps/api
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+cd app
+uvicorn main:app --reload --port 8000
 ```
 
-### 3. Backend
-```bash
-cd backend
-cp .env .env.local   # adjust DB_HOST to localhost if not using Docker
-npm run start:dev
-```
+(Optional: `set CORS_ORIGINS=http://localhost:3000` in PowerShell.)
 
-### 4. Frontend
+### 2. Web (`apps/web`)
+
 ```bash
-cd frontend
-# .env.local already points to http://localhost:4000/api
+cd apps/web
+cp .env.example .env.local   # NEXT_PUBLIC_API_URL=http://localhost:8000/api
+npm install
 npm run dev
 ```
 
-## Algorithms Implemented
+## Biological datasets & experiments
 
-### Needleman-Wunsch (Global Alignment)
-- O(m × n) time, O(m × n) space
-- Full DP matrix returned for animated visualization (sequences ≤ 50 bp)
+Assets live under [`datasets/`](datasets/).
 
-### Smith-Waterman (Local Alignment)
-- O(m × n) time, O(m × n) space
-- Scores floored at 0; traceback from max-score cell
+```bash
+pip install -r apps/api/requirements.txt
+python datasets/fetch_biological.py
+python datasets/run_biological_experiments.py
+python datasets/generate_synthetic.py
+```
 
-### Hirschberg's Algorithm (Space-Optimised Global)
-- O(m × n) time, **O(n) space**
-- Divide-and-conquer: linear-space score rows + recursive split
-- Provably equivalent output to Needleman-Wunsch
+## Testing & proofs
 
-## API Reference
+```bash
+cd apps/api
+pip install -r requirements.txt
+pytest -v --cov=algorithms --cov-config=.coveragerc --cov-fail-under=90
+```
 
-### Algorithms Service (port 8000)
+- **`docs/CORRECTNESS_PROOFS.md`** — NW substructure / recurrence / Hirschberg score equivalence.
+- **`docs/QA_CHECKLIST.md`** — manual browser QA.
+
+## Algorithms implemented
+
+### Needleman–Wunsch (global)
+
+- O(m × n) time, O(m × n) space — full DP matrix for visualisation (short sequences in UI).
+
+### Smith–Waterman (local)
+
+- Scores floored at 0; traceback from max-score cell.
+
+### Hirschberg (space-efficient global)
+
+- O(m × n) time, **O(n)** auxiliary space — divide-and-conquer; score matches NW.
+
+### Gotoh (affine gaps)
+
+- Three DP layers (M / Ix / Iy).
+
+### Banded NW
+
+- Band-limited DP with fallback when the band is exceeded.
+
+## API reference (FastAPI, port 8000)
+
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/api/align/global` | Needleman-Wunsch |
-| POST | `/api/align/local` | Smith-Waterman |
-| POST | `/api/align/optimized` | Hirschberg's |
-| POST | `/api/align/all` | All three, side-by-side |
-| POST | `/api/parse/fasta` | Parse uploaded .fasta file |
+| POST | `/api/align/global` | Needleman–Wunsch (+ optional banded fallback) |
+| POST | `/api/align/local` | Smith–Waterman |
+| POST | `/api/align/optimized` | Hirschberg |
+| POST | `/api/align/gotoh` | Gotoh |
+| POST | `/api/align` | Unified (`algorithm` in JSON body) |
+| POST | `/api/align/all` | NW + SW + HB bundle (length limit enforced) |
+| POST | `/api/parse/fasta` | Multipart FASTA parse |
+| GET | `/api/benchmark` | Benchmark rows |
+| POST | `/api/benchmark/run` | Start benchmark job |
+| GET | `/api/benchmark/job/{id}` | Poll job |
+| GET | `/api/matrices` | Matrix metadata |
 
-### Backend (port 4000)
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/align/global` | NW (persists to DB) |
-| POST | `/api/align/local` | SW (persists to DB) |
-| POST | `/api/align/optimized` | Hirschberg's (persists to DB) |
-| POST | `/api/align/all` | All three (persists all to DB) |
-| GET  | `/api/history` | List alignment history |
-| GET  | `/api/history/stats` | Aggregate stats by algorithm |
-| GET  | `/api/history/:id` | Single record |
-| DELETE | `/api/history/:id` | Delete record |
+### Example request body
 
-### Request body (all align endpoints)
 ```json
 {
   "seq_a": "AGCTGAC",
@@ -106,10 +154,9 @@ npm run dev
 }
 ```
 
-## Frontend Features
-- Algorithm selector (NW / SW / Hirschberg / Compare All)
-- Raw text paste or .fasta file upload
-- Animated DP Table Visualizer (Play / Pause / Step) for sequences ≤ 50 bp
-- Color-coded alignment output (green=match, orange=mismatch, grey=gap)
-- Alignment history page with per-algorithm stats from PostgreSQL
-- BLOSUM62 substitution matrix support
+## Web app features
+
+- Algorithm selector (NW / SW / Hirschberg / Gotoh / Compare all)
+- Raw text paste or `.fasta` upload (calls `/api/parse/fasta`)
+- Animated DP table visualiser for small inputs
+- Alignment history & stats from **browser storage** (`/history`)

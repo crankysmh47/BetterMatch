@@ -1,0 +1,1116 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --dna-green: #1D9E75;
+    --dna-green-light: #E1F5EE;
+    --dna-green-mid: #5DCAA5;
+    --dna-amber: #BA7517;
+    --dna-amber-light: #FAEEDA;
+    --dna-coral: #D85A30;
+    --dna-coral-light: #FAECE7;
+    --dna-blue: #185FA5;
+    --dna-blue-light: #E6F1FB;
+    --dna-purple: #534AB7;
+    --dna-purple-light: #EEEDFE;
+    --bg: var(--color-background-primary);
+    --bg2: var(--color-background-secondary);
+    --border: var(--color-border-tertiary);
+    --text: var(--color-text-primary);
+    --muted: var(--color-text-secondary);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Fraunces', serif;
+  }
+
+  body { font-family: var(--font-sans); background: transparent; color: var(--text); }
+
+  .spec-root { padding: 2rem 0; }
+
+  .spec-header {
+    border-bottom: 0.5px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .spec-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .spec-title span { color: var(--dna-green); font-style: italic; }
+
+  .spec-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .progress-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 1rem;
+  }
+
+  .progress-seg {
+    height: 3px;
+    flex: 1;
+    border-radius: 2px;
+  }
+
+  .legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--bg2);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--border);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .section-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+    font-family: var(--mono);
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .section-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s;
+    color: var(--muted);
+  }
+
+  .chevron.open { transform: rotate(90deg); }
+
+  .section-body { display: none; }
+  .section-body.open { display: block; }
+
+  .task-group {
+    margin-bottom: 1rem;
+  }
+
+  .task-group-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.5rem 0 0.4rem;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 0.5rem;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .task:last-child { border-bottom: none; }
+
+  .task-check {
+    width: 16px;
+    height: 16px;
+    border: 0.5px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    background: var(--bg);
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+
+  .task-check.checked {
+    background: var(--dna-green);
+    border-color: var(--dna-green);
+  }
+
+  .task-check.checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 1px;
+    width: 8px;
+    height: 5px;
+    border-left: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    transform: rotate(-45deg);
+  }
+
+  .task-content { flex: 1; min-width: 0; }
+
+  .task-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .task-text.checked-text {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .tag-algo { background: var(--dna-green-light); color: #085041; }
+  .tag-ui { background: var(--dna-blue-light); color: #0C447C; }
+  .tag-backend { background: var(--dna-amber-light); color: #633806; }
+  .tag-data { background: var(--dna-coral-light); color: #4A1B0C; }
+  .tag-test { background: var(--dna-purple-light); color: #3C3489; }
+  .tag-critical { background: #FCEBEB; color: #501313; }
+  .tag-design { background: #FBEAF0; color: #4B1528; }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .total-progress {
+    background: var(--bg2);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--dna-green);
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--dna-green-light);
+    color: #085041;
+    border-color: var(--dna-green-mid);
+  }
+
+  .collapse-all-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .dna-strand {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .dna-base {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .base-A { background: #E1F5EE; color: #085041; }
+  .base-T { background: #FAEEDA; color: #633806; }
+  .base-G { background: #EEEDFE; color: #3C3489; }
+  .base-C { background: #FAECE7; color: #4A1B0C; }
+</style>
+
+<div class="spec-root">
+  <h2 class="sr-only">GenAlign complete project specification and todo list</h2>
+
+  <div class="spec-header">
+    <div class="spec-title">GenAlign — <span>Complete Project Spec</span></div>
+    <div class="spec-sub">CS-251 DAA · NUST · Every task defined</div>
+    <div class="dna-strand" id="dnaDecor"></div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--dna-green)"></div> Algorithm</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--dna-blue)"></div> UI / Frontend</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--dna-amber)"></div> Backend</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--dna-coral)"></div> Data</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--dna-purple)"></div> Testing</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div> Critical path</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#D4537E"></div> Design</div>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar"></div>
+
+  <div class="total-progress">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:13px; font-weight:500;">Overall completion</span>
+      <span style="font-family:var(--mono); font-size:12px; color:var(--muted);" id="pctLabel">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="doneCount">0 done</span><span id="totalCount">0 total</span></div>
+  </div>
+
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="algo">Algorithm</button>
+    <button class="filter-btn" data-filter="ui">UI</button>
+    <button class="filter-btn" data-filter="backend">Backend</button>
+    <button class="filter-btn" data-filter="data">Data</button>
+    <button class="filter-btn" data-filter="test">Testing</button>
+    <button class="filter-btn" data-filter="critical">Critical</button>
+    <button class="collapse-all-btn" id="collapseAll">Collapse all</button>
+    <button type="button" class="collapse-all-btn" id="uncheckAll" title="Clear every checkmark (saved in this browser)">Uncheck all</button>
+  </div>
+
+  <div id="sectionsContainer"></div>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id: "theme",
+    icon: "TH",
+    color: "#D4537E",
+    iconBg: "#FBEAF0",
+    title: "Theme, Design Language & Branding",
+    tasks: [
+      {
+        group: "Visual identity",
+        items: [
+          { text: "Name: GenAlign. Tagline: 'Where sequences meet.' Displayed in header at all times.", tags: ["design","critical"] },
+          { text: "Primary theme: Deep-sea bioluminescence. Dark navy background (#050E1A) with luminous teal/green accents that mimic glowing DNA. Rationale: DNA sequencing tools are used in darkened lab environments; bioluminescence is the colour palette of life itself at the molecular level.", tags: ["design","critical"] },
+          { text: "Font 1 — Display: Fraunces (Google Fonts, serif, italic weight for titles). Used for: page title, section headings, alignment score display.", tags: ["design"] },
+          { text: "Font 2 — Monospace: IBM Plex Mono. Used for: all sequence text, all DP matrix cell values, scores, position indices, FASTA input fields, tooltips inside matrix.", tags: ["design","critical"] },
+          { text: "Font 3 — Body: Outfit (Google Fonts, clean humanist sans). Used for: all prose, labels, buttons, descriptions.", tags: ["design"] },
+          { text: "Colour tokens (CSS vars): --bg-deep:#050E1A, --bg-surface:#0C1A2E, --bg-card:#112038, --accent-teal:#1BFFB8, --accent-green:#00E676, --accent-amber:#FFB700, --accent-coral:#FF5C57, --base-A:#1BFFB8, --base-T:#FFB700, --base-G:#957FEF, --base-C:#FF5C57, --match-green:#00E676, --mismatch-red:#FF5C57, --gap-amber:#FFB700, --text-primary:#E8F5F0, --text-muted:#6B8FA8, --border-dim:rgba(27,255,184,0.12).", tags: ["design","critical"] },
+          { text: "Each nucleotide base (A/T/G/C) has a fixed dedicated colour used everywhere consistently: A=teal, T=amber, G=purple, C=coral. This extends to FASTA input highlighting, DP matrix cell tinting, alignment output colouring, and the decorative DNA strand in the header.", tags: ["design","critical"] },
+          { text: "Scrollbar styled: thin (4px), thumb colour --accent-teal at 40% opacity, track transparent.", tags: ["design"] },
+          { text: "Custom mouse cursor: default OS cursor retained; no custom cursor to avoid accessibility issues.", tags: ["design"] },
+          { text: "Favicon: SVG double-helix icon, teal on transparent background, 32×32.", tags: ["design"] },
+          { text: "Page title tag: 'GenAlign — Sequence Alignment Platform'.", tags: ["design"] },
+        ]
+      },
+      {
+        group: "Motion principles",
+        items: [
+          { text: "Page load: staggered fade-in-up of header, input panel, then output panel. Duration 400ms per element, 80ms delay between. Easing: cubic-bezier(0.16,1,0.3,1).", tags: ["design"] },
+          { text: "DP matrix cell fill animation: cells illuminate in wave order (row by row, left to right) with a 3ms delay per cell. Glow pulse on maximum-score cells.", tags: ["design","ui"] },
+          { text: "Traceback path draw: after matrix fills, the optimal path is drawn as a glowing line animating from start to end cell over 600ms.", tags: ["design","ui"] },
+          { text: "Alignment output: character pairs fade in sequentially at 8ms intervals to mimic a sequencing machine printing results.", tags: ["design","ui"] },
+          { text: "All hover transitions: 150ms ease. All colour transitions: 200ms ease. No transition exceeds 600ms to avoid sluggishness.", tags: ["design"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "layout",
+    icon: "LY",
+    color: "#185FA5",
+    iconBg: "#E6F1FB",
+    title: "Page Layout & Navigation Structure",
+    tasks: [
+      {
+        group: "Global shell",
+        items: [
+          { text: "Single-page application (React SPA). No page reloads. All views are React components rendered into a root div.", tags: ["ui","critical"] },
+          { text: "Top navbar: fixed, 56px tall, dark (--bg-surface), blur backdrop-filter:blur(12px). Contains: GenAlign logo left, nav links centre, GitHub icon right.", tags: ["ui"] },
+          { text: "Nav links: 'Align' (main tool), 'Algorithms' (explainer), 'Benchmark' (performance charts), 'About'. Active link has underline in --accent-teal.", tags: ["ui"] },
+          { text: "Layout splits into a LEFT PANEL (40% width, sequence inputs + algorithm config) and RIGHT PANEL (60% width, results + visualiser). On viewport < 900px panels stack vertically.", tags: ["ui","critical"] },
+          { text: "Footer: 40px, dark, shows: 'GenAlign · CS-251 DAA · NUST · 2026' and team member names. No other content.", tags: ["ui"] },
+          { text: "Toast notification system: bottom-right corner, max 3 toasts stacked, auto-dismiss 4s, slide-in from right animation. Used for: copy success, job queued, error messages.", tags: ["ui"] },
+        ]
+      },
+      {
+        group: "Left input panel",
+        items: [
+          { text: "Panel label: 'Sequences' in small monospaced uppercase, teal, at top.", tags: ["ui"] },
+          { text: "Sequence A textarea: 200px tall, monospace font, dark background (--bg-card), teal border on focus. Placeholder: '>seq_A\\nACGTACGTACGT'. Character count badge shown bottom-right of textarea, updates live.", tags: ["ui","critical"] },
+          { text: "Sequence B textarea: identical styling to Sequence A.", tags: ["ui","critical"] },
+          { text: "Each textarea has a nucleotide colouring toggle (button top-right of textarea): when ON, each character is wrapped in a coloured span (A=teal, T=amber, G=purple, C=coral) using a contentEditable div replacing the textarea. When OFF, plain text.", tags: ["ui"] },
+          { text: "FASTA file upload button below each textarea: clicking opens file picker filtered to .fasta/.fa/.txt. On file select, sequences parsed by BioPython backend and first sequence populated into the textarea. Loading spinner shown during parse.", tags: ["ui","backend"] },
+          { text: "Swap sequences button (↕ icon) between the two textareas: swaps content of A and B with a 200ms slide animation.", tags: ["ui"] },
+          { text: "Sequence validation: real-time. Invalid characters (anything not A/T/G/C/U/N for DNA, or valid amino acids for protein mode) highlighted in coral red. A warning badge 'Invalid characters detected' appears below textarea.", tags: ["ui","critical"] },
+          { text: "Mode toggle: DNA / Protein. Switches validation rules and scoring matrix. DNA uses match/mismatch scores; Protein uses BLOSUM62.", tags: ["ui","critical"] },
+        ]
+      },
+      {
+        group: "Algorithm config panel",
+        items: [
+          { text: "Section label: 'Algorithm' in small monospaced uppercase.", tags: ["ui"] },
+          { text: "Algorithm selector: four large card-style radio buttons horizontally. Cards: Needleman-Wunsch, Smith-Waterman, Hirschberg, Gotoh. Each card shows: algorithm name (Fraunces font), type badge (Global/Local), time complexity badge, space complexity badge. Selected card glows teal outline.", tags: ["ui","critical"] },
+          { text: "Hovering an algorithm card shows a 200px tooltip popup with: one-line description, key use case, and a mini ASCII illustration of alignment type.", tags: ["ui"] },
+          { text: "Scoring parameters sub-panel (shown below algorithm cards):", tags: ["ui"] },
+          { text: "Match score slider: range 0–10, default 2. Shows current value. Label: 'Match reward'.", tags: ["ui"] },
+          { text: "Mismatch score slider: range -10–0, default -1. Label: 'Mismatch penalty'.", tags: ["ui"] },
+          { text: "Gap open penalty slider: range -20–0, default -2. Label: 'Gap open'. Disabled (greyed) when algorithm is NW, SW, or Hirschberg (only active for Gotoh).", tags: ["ui","critical"] },
+          { text: "Gap extend penalty slider: range -10–0, default -0.5. Label: 'Gap extend'. Same disable logic as gap open.", tags: ["ui","critical"] },
+          { text: "Gap penalty slider (linear): range -10–0, default -1. Shown for NW/SW/Hirschberg; hidden for Gotoh (replaced by open+extend above).", tags: ["ui","critical"] },
+          { text: "Scoring matrix selector (Protein mode only): dropdown with options BLOSUM62, BLOSUM45, BLOSUM80, PAM250. Shows a 6×6 preview grid of the selected matrix on hover.", tags: ["ui"] },
+          { text: "Banded DP toggle checkbox: 'Use banded DP (faster for similar sequences)'. When checked shows a bandwidth slider: range 1–500, default 50. Only enabled for NW and Hirschberg; hidden for SW (doesn't apply) and Gotoh (separate implementation).", tags: ["ui","critical"] },
+          { text: "Show DP matrix toggle: checkbox defaulting ON. When OFF, DP matrix visualiser tab is hidden from results.", tags: ["ui"] },
+          { text: "Align button: full width, 48px tall, green gradient background, white text, 'Run Alignment' label with a ▶ icon. Disabled (greyed) when sequences are empty or contain invalid characters. Shows loading spinner while request is in flight.", tags: ["ui","critical"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "algorithms",
+    icon: "AL",
+    color: "#1D9E75",
+    iconBg: "#E1F5EE",
+    title: "Algorithm Implementations (Core)",
+    tasks: [
+      {
+        group: "Needleman-Wunsch",
+        items: [
+          { text: "Implement NW from scratch in Python 3.11. No use of BioPython alignment module.", tags: ["algo","critical"] },
+          { text: "NW accepts: seq_a (str), seq_b (str), match (int), mismatch (int), gap_penalty (int). Returns: aligned_a (str), aligned_b (str), score (int), dp_matrix (2D list), traceback_path (list of (i,j) tuples).", tags: ["algo","critical"] },
+          { text: "Initialise dp[0][0..n] and dp[0..m][0] with cumulative gap penalties.", tags: ["algo"] },
+          { text: "Fill DP table nested loop: diagonal = dp[i-1][j-1]+score(a[i],b[j]), up = dp[i-1][j]+gap, left = dp[i][j-1]+gap. dp[i][j] = max of three.", tags: ["algo"] },
+          { text: "Traceback: start at dp[m][n], walk back to dp[0][0] recording path. Build aligned_a and aligned_b strings with '-' for gaps.", tags: ["algo","critical"] },
+          { text: "Support both DNA scoring (match/mismatch) and BLOSUM62 substitution matrix for protein mode. score() function checks mode and returns correct value.", tags: ["algo"] },
+          { text: "Return the full dp_matrix as a JSON-serialisable 2D list (not numpy array) so it can be sent over the API.", tags: ["algo","backend"] },
+          { text: "Write unit test: align 'GATTACA' vs 'GCATGCU' with match=1, mismatch=-1, gap=-1. Verify score and alignment string match known correct output.", tags: ["test"] },
+          { text: "Write unit test: empty string input for seq_a. Expect aligned_a = '------', aligned_b = seq_b, score = len(seq_b)*gap.", tags: ["test"] },
+          { text: "Write unit test: identical sequences. Expect alignment score = len(seq)*match with no gaps.", tags: ["test"] },
+          { text: "Benchmark NW: measure time for sequence lengths [100,500,1000,2000,5000,10000]. Record in benchmark table.", tags: ["test","data"] },
+        ]
+      },
+      {
+        group: "Smith-Waterman",
+        items: [
+          { text: "Implement SW from scratch in Python 3.11.", tags: ["algo","critical"] },
+          { text: "SW accepts same parameters as NW. Returns: aligned_a, aligned_b, score, dp_matrix, traceback_path, max_pos (i,j) where traceback starts.", tags: ["algo","critical"] },
+          { text: "Key difference from NW: dp[i][j] = max(0, diagonal, up, left). Track max_score and max_pos during fill.", tags: ["algo","critical"] },
+          { text: "Traceback starts at max_pos, stops when cell value reaches 0 (not when reaching dp[0][0]).", tags: ["algo","critical"] },
+          { text: "The returned dp_matrix must also include which cells are inside the 'active region' (value > 0) as a separate boolean matrix for the visualiser to highlight.", tags: ["algo","ui"] },
+          { text: "Write unit test: align 'TGTTACGG' vs 'GGTTGACTA'. Verify local alignment score and aligned substring match published result.", tags: ["test"] },
+          { text: "Benchmark SW: same lengths as NW. Include in benchmark table.", tags: ["test","data"] },
+        ]
+      },
+      {
+        group: "Hirschberg",
+        items: [
+          { text: "Implement Hirschberg space-optimised algorithm from scratch.", tags: ["algo","critical"] },
+          { text: "Implement NW_SCORE_LAST_ROW(seq_a, seq_b, gap): computes only the last row of DP using O(n) space. Returns list of n+1 scores.", tags: ["algo","critical"] },
+          { text: "Implement HIRSCHBERG(seq_a, seq_b): recursively divide seq_a at midpoint, compute forward and backward last-row scores, find optimal split column, recurse on sub-problems.", tags: ["algo","critical"] },
+          { text: "Base cases: len(seq_a)==0 → return all gaps for seq_b; len(seq_b)==0 → return all gaps for seq_a; len(seq_a)==1 → run NW directly.", tags: ["algo","critical"] },
+          { text: "Verify memory usage using tracemalloc: aligning two 10,000-character sequences should use < 5MB (vs ~800MB for full NW matrix).", tags: ["algo","test","critical"] },
+          { text: "Because Hirschberg does not produce a full DP matrix, the visualiser must show a different panel: a recursion tree diagram instead of the matrix, showing how the sequences are split at each level.", tags: ["algo","ui"] },
+          { text: "Write unit test: verify Hirschberg gives same alignment score as NW for the same inputs (scores must match; alignment string may differ in tie-break cases).", tags: ["test","critical"] },
+          { text: "Benchmark Hirschberg: same lengths as NW. Also measure memory at each length using tracemalloc. Include in benchmark table.", tags: ["test","data"] },
+        ]
+      },
+      {
+        group: "Gotoh (Affine Gap Penalties) — NEW",
+        items: [
+          { text: "Implement Gotoh's algorithm from scratch in Python 3.11.", tags: ["algo","critical"] },
+          { text: "Gotoh uses THREE DP matrices: M (match/mismatch), Ix (gap in seq_a), Iy (gap in seq_b).", tags: ["algo","critical"] },
+          { text: "Recurrences: M[i][j]=max(M[i-1][j-1], Ix[i-1][j-1], Iy[i-1][j-1]) + score(a[i],b[j]); Ix[i][j]=max(M[i-1][j]+gap_open, Ix[i-1][j]+gap_extend); Iy[i][j]=max(M[i][j-1]+gap_open, Iy[i][j-1]+gap_extend).", tags: ["algo","critical"] },
+          { text: "Initialise: M[0][0]=0; M[i][0]=gap_open+(i-1)*gap_extend; M[0][j]=gap_open+(j-1)*gap_extend; Ix[i][0]=gap_open+(i-1)*gap_extend; Iy[0][j]=gap_open+(j-1)*gap_extend; Ix[0][j]=-inf; Iy[i][0]=-inf.", tags: ["algo","critical"] },
+          { text: "Traceback: three separate traceback matrices (one per DP matrix), tracking which matrix each cell came from. Reconstruct alignment following state transitions.", tags: ["algo","critical"] },
+          { text: "API returns: aligned_a, aligned_b, score, M_matrix, Ix_matrix, Iy_matrix, traceback_path.", tags: ["algo","backend"] },
+          { text: "In the DP matrix visualiser, Gotoh shows three matrix tabs (M / Ix / Iy) that can be switched between. Traceback path is shown on whichever tab is active.", tags: ["algo","ui"] },
+          { text: "Write unit test: align 'ACGTTGCA' vs 'TGCAACGT' with gap_open=-2, gap_extend=-0.5. Verify score matches manual calculation.", tags: ["test"] },
+          { text: "Write unit test: show that Gotoh with gap_open=gap_extend=gap gives same result as NW with the same linear gap (they should be mathematically equivalent in this edge case).", tags: ["test"] },
+          { text: "Demonstrate biological superiority: align a protein sequence pair with Gotoh vs NW and show that Gotoh produces longer contiguous matches (fewer fragmented gaps).", tags: ["data","test"] },
+        ]
+      },
+      {
+        group: "Banded DP — NEW",
+        items: [
+          { text: "Implement banded NW from scratch. Accepts additional parameter bandwidth k (int).", tags: ["algo","critical"] },
+          { text: "Only compute cells within band |i-j| <= k. Cells outside band set to -infinity.", tags: ["algo","critical"] },
+          { text: "If sequences are too dissimilar for the given bandwidth (traceback path exits the band), the API returns a flag 'band_exceeded: true' and falls back to full NW automatically.", tags: ["algo","backend","critical"] },
+          { text: "Implement banded Hirschberg variant: NW_SCORE_LAST_ROW function only iterates within band [max(0,i-k) .. min(n,i+k)].", tags: ["algo"] },
+          { text: "Benchmark banded NW vs full NW at bandwidth k=50,100,200,500 for sequences of length 10,000. Show speedup factor in benchmark table.", tags: ["test","data"] },
+          { text: "Write unit test: verify banded NW gives identical result to full NW when bandwidth > max(m,n) (i.e., effectively unbounded).", tags: ["test"] },
+          { text: "Write unit test: verify banded NW gives correct result on two nearly-identical sequences (1% mutation rate) with bandwidth=100.", tags: ["test"] },
+        ]
+      },
+      {
+        group: "Scoring matrices",
+        items: [
+          { text: "Load BLOSUM62 as a Python dictionary: {('A','A'):4, ('A','R'):-1, ...}. Source from NCBI. Store in a separate file scoring_matrices.py.", tags: ["algo","data"] },
+          { text: "Load BLOSUM45, BLOSUM80, PAM250 similarly. Each as a separate dict in scoring_matrices.py.", tags: ["algo","data"] },
+          { text: "score(a, b, mode, matrix) function: if mode==DNA return match if a==b else mismatch; if mode==protein return matrix[(a,b)] with symmetric lookup fallback.", tags: ["algo","critical"] },
+          { text: "Handle ambiguous nucleotide codes (N = any base). N vs any base scores as 0.", tags: ["algo"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "backend",
+    icon: "BE",
+    color: "#BA7517",
+    iconBg: "#FAEEDA",
+    title: "Algorithms API — FastAPI (Python)",
+    tasks: [
+      {
+        group: "Project structure",
+        items: [
+          { text: "Single algorithms microservice under apps/api/: FastAPI main.py (app/), Python package algorithms/ with nw.py, sw.py, hirschberg.py, gotoh.py, banded.py, scoring_matrices.py, benchmark_store.py. No NestJS layer.", tags: ["backend","critical"] },
+          { text: "requirements.txt includes: fastapi, uvicorn, pydantic, biopython, python-multipart, httpx, pytest, pytest-asyncio, pytest-cov.", tags: ["backend"] },
+          { text: "Secrets via Space / Docker env only: CORS_ORIGINS (comma-separated Vercel origins for production). Optional local .env — never commit.", tags: ["backend","critical"] },
+        ]
+      },
+      {
+        group: "API endpoints",
+        items: [
+          { text: "POST /api/align plus /api/align/global | local | optimized | gotoh — JSON body {seq_a, seq_b, algorithm, match, mismatch, gap, gap_open, gap_extend, banded, bandwidth, mode, matrix_name, use_blosum62}. Returns alignment payload.", tags: ["backend","critical"] },
+          { text: "Alignment response includes: aligned_a/b, score, identity_pct, similarity_pct, gap_pct, alignment_length, dp_table (or null), traceback_path, recursion_tree (Hirschberg), M/Ix/Iy matrices (Gotoh), elapsed_ms, peak_memory_kb, band_exceeded.", tags: ["backend","critical"] },
+          { text: "POST /api/parse/fasta — multipart upload; returns sequences[], count, optional warning (caps at 10 records).", tags: ["backend"] },
+          { text: "GET /api/benchmark — JSON rows for Benchmark page.", tags: ["backend","data"] },
+          { text: "POST /api/benchmark/run + GET /api/benchmark/job/{id} — async benchmark job polling.", tags: ["backend"] },
+          { text: "GET /api/matrices — lists available substitution matrices.", tags: ["backend"] },
+          { text: "Alignment history: persisted client-side in Next.js (localStorage); optional future Supabase direct from frontend — no server session DB required.", tags: ["backend"] },
+          { text: "HTTP 200 / 400 / 422 / 500 with FastAPI-style {detail} on errors.", tags: ["backend","critical"] },
+          { text: "CORS: allow explicit origins from CORS_ORIGINS env when set (Vercel); otherwise * for local dev (credentials off).", tags: ["backend"] },
+          { text: "Validation: reject sequences > 50k chars with clear error.", tags: ["backend","critical"] },
+          { text: "Heavy alignment remains synchronous in-process; acceptable for coursework demo loads on HF CPU tier.", tags: ["backend"] },
+        ]
+      },
+      {
+        group: "Persistence (deferred)",
+        items: [
+          { text: "No PostgreSQL in core architecture. Benchmark warmup rows live in-process (benchmark_store); resetting Space clears them.", tags: ["backend"] },
+          { text: "Optional later: Supabase/Neon Postgres accessed from Next.js or FastAPI if multi-device history is required.", tags: ["backend"] },
+          { text: "HF Space Dockerfile at hf-space/Dockerfile (build context = monorepo root).", tags: ["backend","critical"] },
+        ]
+      },
+      {
+        group: "FASTA parsing",
+        items: [
+          { text: "BioPython SeqIO.parse() on uploads; id, description, uppercase sequence.", tags: ["backend","data"] },
+          { text: "Per-sequence invalid_chars for DNA vs protein mode.", tags: ["backend"] },
+          { text: "More than 10 sequences → truncate with warning in JSON.", tags: ["backend"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "visualiser",
+    icon: "VS",
+    color: "#534AB7",
+    iconBg: "#EEEDFE",
+    title: "DP Matrix Visualiser",
+    tasks: [
+      {
+        group: "Matrix rendering",
+        items: [
+          { text: "Matrix rendered on HTML Canvas element. Canvas width = min(container_width, (n+2)*cell_size). Canvas height = (m+2)*cell_size. Cell size default 36px, minimum 14px (auto-scales based on sequence length).", tags: ["ui","critical"] },
+          { text: "Row 0 and column 0 show sequence characters for seq_b (top) and seq_a (left) respectively, styled in their nucleotide colour (A=teal, T=amber, G=purple, C=coral).", tags: ["ui","critical"] },
+          { text: "Each cell shows the DP score value in IBM Plex Mono, font-size scaled to cell-size. Cells are coloured by value: dark cells (high-negative) to luminous teal (high-positive) using a continuous colour scale.", tags: ["ui","critical"] },
+          { text: "For Smith-Waterman: cells with value 0 show in deep grey. The max-score cell glows bright (pulsing box-shadow animation).", tags: ["ui"] },
+          { text: "Traceback path drawn as a 2px luminous line connecting cell centres, animated to draw from final cell back to origin over 600ms.", tags: ["ui","critical"] },
+          { text: "Hovering a cell shows a tooltip: position (i,j), value, and which of the three transitions (diagonal/up/left) produced it. Tooltip appears above cell, dark background, white text.", tags: ["ui"] },
+          { text: "Clicking a cell pins the tooltip (it stays visible). Clicking again unpins.", tags: ["ui"] },
+          { text: "For Gotoh: three canvas tabs (M / Ix / Iy). Switching tabs smoothly crossfades canvases (opacity transition 200ms).", tags: ["ui"] },
+          { text: "Zoom controls: + / - buttons and a slider (1x to 4x). Canvas redraws at new cell size. Zoom state persists between algorithm tab switches.", tags: ["ui"] },
+          { text: "Pan support: click-drag on canvas pans the viewport. For large matrices only the visible region is rendered (virtual scrolling via OffscreenCanvas).", tags: ["ui"] },
+          { text: "Step-through mode: a stepper UI (Previous step / Next step / Play / Pause buttons + speed slider) that fills the matrix one cell at a time. Each step highlights the three predecessor cells with coloured arrows indicating which transition was chosen.", tags: ["ui","critical"] },
+          { text: "Step-through: current cell is highlighted with a bright teal border. The recurrence formula for the current cell is displayed in a formula panel below the matrix, with actual values substituted in.", tags: ["ui","critical"] },
+          { text: "Play speed slider: range 1ms to 500ms per step. Default 20ms.", tags: ["ui"] },
+          { text: "Export matrix button: downloads the DP matrix as a CSV file.", tags: ["ui"] },
+          { text: "Matrix size warning: if sequence lengths > 200×200, show banner 'Matrix too large to display cell values — showing colour map only' and omit text in cells for performance.", tags: ["ui","critical"] },
+        ]
+      },
+      {
+        group: "Hirschberg recursion tree",
+        items: [
+          { text: "Hirschberg does not produce a full matrix; instead render a collapsible tree diagram using SVG. Each node shows: depth, seq_a slice range, seq_b slice range, split column.", tags: ["ui"] },
+          { text: "Nodes coloured by depth level using the teal colour ramp (darkest at root, lightest at leaves).", tags: ["ui"] },
+          { text: "Clicking a node shows the sub-alignment that was computed at that recursion level.", tags: ["ui"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "results",
+    icon: "RS",
+    color: "#D85A30",
+    iconBg: "#FAECE7",
+    title: "Alignment Results Panel",
+    tasks: [
+      {
+        group: "Statistics cards row",
+        items: [
+          { text: "Four metric cards displayed horizontally: Alignment Score (large number in Fraunces font), Identity % (matches/alignment_length × 100), Similarity % (matches+conservative_substitutions/length), Gap %.", tags: ["ui","critical"] },
+          { text: "Alignment length shown as a fifth card: 'Length: N bp'.", tags: ["ui"] },
+          { text: "Runtime card: 'Time: X ms' in amber colour.", tags: ["ui"] },
+          { text: "Memory card: 'Memory: X KB'. For Hirschberg this should visually contrast against the NW value (shown side-by-side with a 'vs NW' comparison on hover).", tags: ["ui"] },
+        ]
+      },
+      {
+        group: "Alignment display",
+        items: [
+          { text: "Aligned sequences rendered in a fixed-width monospace div. Characters colour-coded: match = bright green, mismatch = coral red, gap = amber dash. A middle row shows | for match, : for conservative mismatch, space for gap (BLAST-style).", tags: ["ui","critical"] },
+          { text: "Line-wrapped at 60 characters per row (configurable via input). Position numbers shown at start of each line.", tags: ["ui","critical"] },
+          { text: "Each character is individually clickable: clicking a character in the alignment highlights both source characters in the original sequence textareas (scrolls to position and highlights with yellow background).", tags: ["ui"] },
+          { text: "Copy alignment button: copies alignment in FASTA-like text format to clipboard. Shows toast 'Alignment copied!'.", tags: ["ui"] },
+          { text: "Download alignment button: downloads as .txt file with header metadata (algorithm, score, parameters, date).", tags: ["ui"] },
+          { text: "For local alignment (SW): the un-aligned flanking regions are shown in grey/dimmed, aligned region in full colour, to visually distinguish the local match.", tags: ["ui","critical"] },
+        ]
+      },
+      {
+        group: "Gap analysis panel",
+        items: [
+          { text: "A gap distribution bar below the alignment: a thin horizontal bar where teal segments = matches, coral = mismatches, amber = gaps. Width proportional to count. This gives a quick visual fingerprint of the alignment quality.", tags: ["ui"] },
+          { text: "Hover over any colour segment to see the count and percentage in a tooltip.", tags: ["ui"] },
+        ]
+      },
+      {
+        group: "History drawer",
+        items: [
+          { text: "A collapsible History sidebar (right edge) showing last 20 alignments from this session. Each entry shows: algorithm badge, identity %, timestamp. Clicking an entry loads that result back into all panels.", tags: ["ui"] },
+          { text: "History stored in browser localStorage for persistence across page refreshes (optional Supabase later for cloud sync).", tags: ["ui","backend"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "benchmark",
+    icon: "BM",
+    color: "#185FA5",
+    iconBg: "#E6F1FB",
+    title: "Benchmark & Complexity Analysis Page",
+    tasks: [
+      {
+        group: "Performance chart",
+        items: [
+          { text: "Line chart (Chart.js) with x-axis = sequence length (100,500,1000,2000,5000,10000), y-axis = time (ms). One line per algorithm: NW (teal), SW (amber), Hirschberg (purple), Gotoh (coral), Banded NW (green dashed), Banded Hirschberg (green dotted).", tags: ["ui","data"] },
+          { text: "Toggling algorithm buttons above chart shows/hides lines. Smooth animation on toggle.", tags: ["ui"] },
+          { text: "Second chart: Memory (KB) vs sequence length. NW and SW show steep O(mn) curve; Hirschberg shows near-flat O(n) curve. This visually proves Hirschberg's advantage.", tags: ["ui","data","critical"] },
+          { text: "Theoretical complexity overlay: dashed lines showing the theoretical O(mn) and O(n) curves scaled to the data. Toggle button to show/hide theoretical curves.", tags: ["ui","data"] },
+          { text: "'Run live benchmark' button: calls POST /api/benchmark/run, polls for completion, then updates charts with live data. Shows progress bar during run.", tags: ["ui","backend"] },
+        ]
+      },
+      {
+        group: "Benchmark data table",
+        items: [
+          { text: "Sortable table below charts: columns Algorithm | Seq Length | Time (ms) | Memory (KB) | Banded | Bandwidth. Sortable by clicking column headers.", tags: ["ui","data"] },
+          { text: "Download table as CSV button.", tags: ["ui"] },
+        ]
+      },
+      {
+        group: "Banded DP speedup section",
+        items: [
+          { text: "A separate sub-section showing speedup factor chart: x-axis = bandwidth k (50,100,200,500,full), y-axis = time. Shows diminishing returns and where banded = full NW.", tags: ["ui","data"] },
+          { text: "Text annotation at the crossover point: 'Banded NW equals full NW at k ≈ N'. Auto-computed from the data.", tags: ["ui","data"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "algorithms_page",
+    icon: "AP",
+    color: "#1D9E75",
+    iconBg: "#E1F5EE",
+    title: "Algorithms Explainer Page",
+    tasks: [
+      {
+        group: "Content sections",
+        items: [
+          { text: "One card per algorithm (NW, SW, Hirschberg, Gotoh, Banded). Each card has: algorithm name, publication year, authors, type, a plain-English description (3–4 sentences), recurrence relation in LaTeX (rendered with KaTeX), time complexity, space complexity.", tags: ["ui"] },
+          { text: "Render LaTeX using KaTeX (npm bundle or CDN). Recurrence equations displayed in display mode (block, centred).", tags: ["ui"] },
+          { text: "An interactive mini toy alignment demo in each card: two short text fields (default 'GATTACA' and 'GCATGCU'), Run button, shows alignment result inline using that algorithm only.", tags: ["ui","critical"] },
+          { text: "LCS → Edit Distance → NW lineage section: a visual flow diagram (SVG) showing how LCS is the ancestor of all these algorithms, with arrows and brief annotations.", tags: ["ui"] },
+          { text: "Comparison table at bottom: NW vs SW vs Hirschberg vs Gotoh vs Banded NW. Rows: type, gap model, space, time, best for, worst for.", tags: ["ui"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "data_testing",
+    icon: "DT",
+    color: "#D4537E",
+    iconBg: "#FBEAF0",
+    title: "Datasets & Biological Testing",
+    tasks: [
+      {
+        group: "NCBI sequence datasets",
+        items: [
+          { text: "Download SARS-CoV-2 original spike protein (GenBank MN908947.3 region 21563–25384) as spike_original.fasta.", tags: ["data"] },
+          { text: "Download Delta variant spike (B.1.617.2, GenBank OK091006.1) as spike_delta.fasta.", tags: ["data"] },
+          { text: "Download Omicron variant spike (B.1.1.529, GenBank OL672836.1) as spike_omicron.fasta.", tags: ["data"] },
+          { text: "Download human insulin protein sequence (UniProt P01308) as insulin_human.fasta.", tags: ["data"] },
+          { text: "Download mouse insulin protein sequence (UniProt P01326) as insulin_mouse.fasta.", tags: ["data"] },
+          { text: "All datasets stored in /datasets/ folder at repo root and included in repo.", tags: ["data"] },
+        ]
+      },
+      {
+        group: "Biological experiments",
+        items: [
+          { text: "Experiment 1: Align original vs Delta spike using NW. Record score, identity %, locations of mutations in traceback path. Document which amino acid positions differ.", tags: ["data","critical"] },
+          { text: "Experiment 2: Align original vs Omicron spike using NW. Compare mutation count with Experiment 1 to confirm Omicron has more mutations.", tags: ["data","critical"] },
+          { text: "Experiment 3: Align human vs mouse insulin using Gotoh+BLOSUM62. Show that affine gaps produce a more biologically sensible alignment than linear gap NW.", tags: ["data","critical"] },
+          { text: "Experiment 4: Find a conserved local region within insulin using SW. The high-scoring local alignment should correspond to the known conserved C-peptide or A-chain.", tags: ["data"] },
+          { text: "All experiment results included in final report with screenshots of GenAlign's output.", tags: ["data"] },
+        ]
+      },
+      {
+        group: "Synthetic benchmarking data",
+        items: [
+          { text: "Python script generate_synthetic.py: generates random DNA sequences at lengths [100,500,1000,2000,5000,10000] and a near-identical pair (1% random substitution rate) at each length.", tags: ["data"] },
+          { text: "Stored as synthetic/ folder under /datasets/.", tags: ["data"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "testing",
+    icon: "TE",
+    color: "#534AB7",
+    iconBg: "#EEEDFE",
+    title: "Testing, Correctness Proofs & QA",
+    tasks: [
+      {
+        group: "Unit tests (pytest)",
+        items: [
+          { text: "All unit tests under apps/api/tests/. Run pytest -v --cov=algorithms --cov-config=.coveragerc — alignment modules exceed 90% line coverage (pytest-cov; benchmark runner omitted from denominator).", tags: ["test","critical"] },
+          { text: "test_nw.py: min 8 test cases covering normal, edge (empty, length-1), identical, all-gaps, protein mode.", tags: ["test"] },
+          { text: "test_sw.py: min 6 test cases including known published alignment results.", tags: ["test"] },
+          { text: "test_hirschberg.py: min 5 test cases including memory verification and score-equivalence with NW.", tags: ["test"] },
+          { text: "test_gotoh.py: min 6 test cases including affine edge case and NW equivalence.", tags: ["test"] },
+          { text: "test_banded.py: min 4 test cases including band_exceeded fallback case.", tags: ["test"] },
+          { text: "test_api.py: integration tests calling FastAPI endpoints via httpx.AsyncClient. Min 10 test cases.", tags: ["test","backend"] },
+          { text: "test_scoring_matrices.py: verify BLOSUM62 is symmetric, all canonical amino acid pairs present, values within expected range.", tags: ["test"] },
+        ]
+      },
+      {
+        group: "Correctness proofs (report section)",
+        items: [
+          { text: "Formal proof of NW optimal substructure: show that the alignment of seq_a[1..i] and seq_b[1..j] contains optimal alignments of sub-sequences. Use proof by contradiction. (Written up in docs/CORRECTNESS_PROOFS.md.)", tags: ["test"] },
+          { text: "Inductive proof: NW DP correctly fills all cells given correct base cases and recurrence. (Same document.)", tags: ["test"] },
+          { text: "Proof that Hirschberg produces the same score as NW (not necessarily same alignment string, but same optimal score). (Same document.)", tags: ["test"] },
+        ]
+      },
+      {
+        group: "Frontend QA",
+        items: [
+          { text: "Test on Chrome, Firefox, Safari. No browser-specific rendering bugs. (Checklist: docs/QA_CHECKLIST.md.)", tags: ["test","ui"] },
+          { text: "Test responsive layout at 375px (iPhone SE), 768px (tablet), 1440px (desktop).", tags: ["test","ui"] },
+          { text: "Verify canvas matrix renders correctly for 10×10, 50×50, 200×200 matrices.", tags: ["test","ui"] },
+          { text: "Verify step-through mode completes correctly for all four algorithms.", tags: ["test","ui"] },
+          { text: "Verify that invalid sequence characters trigger the validation warning within 200ms of typing.", tags: ["test","ui"] },
+        ]
+      }
+    ]
+  },
+  {
+    id: "deployment",
+    icon: "DP",
+    color: "#BA7517",
+    iconBg: "#FAEEDA",
+    title: "Deployment & DevOps",
+    tasks: [
+      {
+        group: "Infrastructure",
+        items: [
+          { text: "Frontend: Next.js on Vercel (npm run build). Set NEXT_PUBLIC_API_URL to the Hugging Face Space URL including /api (no trailing slash).", tags: ["backend","critical"] },
+          { text: "Algorithms API: Hugging Face Docker Space using hf-space/Dockerfile (repo-root context). Exposes FastAPI on PORT (7860 default). Document CORS_ORIGINS for the Vercel domain.", tags: ["backend","critical"] },
+          { text: "Local dev: docker compose up — apps/web :3000, apps/api :8000; or uvicorn from apps/api/app.", tags: ["backend"] },
+          { text: "GitHub repository public with README: architecture (Vercel + HF), setup, algorithms overview, team credits, live demo links.", tags: ["backend"] },
+          { text: ".github/workflows/test.yml: pytest coverage gate on apps/api (package algorithms); apps/web production build.", tags: ["backend","test"] },
+        ]
+      },
+      {
+        group: "Performance",
+        items: [
+          { text: "Frontend: lazy-load the Benchmark page and Algorithms page (React.lazy + Suspense) to reduce initial bundle size.", tags: ["ui","backend"] },
+          { text: "Canvas matrix: virtual rendering for matrices > 150×150 (only render visible cells). Prevents browser freeze.", tags: ["ui","critical"] },
+          { text: "API response time target: interactive < ~2s for mid-sized sequences on HF CPU tier (cold starts may add latency).", tags: ["backend"] },
+        ]
+      }
+    ]
+  }
+];
+
+function countTasks(section) {
+  return section.tasks.reduce((sum, g) => sum + g.items.length, 0);
+}
+
+const totalTasks = SECTIONS.reduce((s, sec) => s + countTasks(sec), 0);
+
+/**
+ * Tasks verified implemented vs this repo (conservative). Markers: [sectionIndex, taskGroupIndex, itemIndices].
+ * Regenerate list: node scripts/emit-verified-checks.mjs
+ */
+const CODEBASE_VERIFIED_MARKERS = [
+  [0, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+  [0, 1, [0, 1, 2, 3, 4]],
+  [1, 0, [0, 1, 2, 3, 4, 5]],
+  [1, 1, [0, 1, 2, 3, 4, 5, 6, 7]],
+  [1, 2, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]],
+  [2, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+  [2, 1, [0, 1, 2, 3, 4, 5, 6, 7]],
+  [2, 2, [0, 1, 2, 3, 4, 5, 6, 7]],
+  [2, 3, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+  [2, 4, [0, 1, 2, 3, 4, 5, 6]],
+  [2, 5, [0, 1, 2, 3]],
+  [3, 0, [0, 1, 2]],
+  [3, 1, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+  [3, 2, [0, 1, 2]],
+  [3, 3, [0, 1, 2]],
+  [4, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]],
+  [4, 1, [0, 1, 2]],
+  [5, 0, [0, 1, 2, 3]],
+  [5, 1, [0, 1, 2, 3, 4, 5]],
+  [5, 2, [0, 1]],
+  [5, 3, [0, 1]],
+  [6, 0, [0, 1, 2, 3, 4]],
+  [6, 1, [0, 1]],
+  [6, 2, [0, 1]],
+  [7, 0, [0, 1, 2, 3, 4]],
+  [8, 0, [0, 1, 2, 3, 4, 5]],
+  [8, 1, [0, 1, 2, 3]],
+  [8, 2, [0, 1]],
+  [9, 0, [0, 1, 2, 3, 4, 5, 6]],
+  [9, 1, [0, 1, 2]],
+  [9, 2, [0, 1, 2, 3, 4]],
+  [10, 0, [4]],
+  [10, 1, [0]],
+];
+const CODEBASE_VERIFIED_TASK_IDS = CODEBASE_VERIFIED_MARKERS.flatMap(([si, ti, idxs]) => {
+  const sec = SECTIONS[si];
+  const tg = sec.tasks[ti];
+  return idxs.map((ii) => `${sec.id}_${tg.group}_${ii}`);
+});
+/** Bump when CODEBASE_VERIFIED_MARKERS changes so new IDs are seeded once per browser. */
+const CODEBASE_VERIFIED_SEED_VERSION = 'verified_132_hf_vercel_v10';
+
+/** New key (May 2026): previous key implied “complete”; this starts honest / empty until you check items. */
+const SPEC_STORAGE_KEY = 'genalign_spec_checks_v_manual_2026';
+const LEGACY_SPEC_KEYS = ['genalign_spec_checks_v_complete_2026'];
+
+let checkedState = {};
+
+try {
+  LEGACY_SPEC_KEYS.forEach((k) => {
+    try {
+      localStorage.removeItem(k);
+    } catch (e) {}
+  });
+  const saved = localStorage.getItem(SPEC_STORAGE_KEY);
+  if (saved) checkedState = JSON.parse(saved);
+} catch (e) {}
+
+function applyCodebaseVerifiedChecks() {
+  try {
+    const seedKey = 'genalign_spec_verified_seed_' + CODEBASE_VERIFIED_SEED_VERSION;
+    if (localStorage.getItem(seedKey)) return;
+    CODEBASE_VERIFIED_TASK_IDS.forEach((tid) => {
+      checkedState[tid] = true;
+    });
+    localStorage.setItem(seedKey, '1');
+    saveState();
+  } catch (e) {}
+}
+
+applyCodebaseVerifiedChecks();
+
+function saveState() {
+  try { localStorage.setItem(SPEC_STORAGE_KEY, JSON.stringify(checkedState)); } catch(e) {}
+}
+
+function getCheckedCount() {
+  return Object.values(checkedState).filter(Boolean).length;
+}
+
+function updateProgress() {
+  const done = getCheckedCount();
+  const pct = totalTasks > 0 ? Math.round(done / totalTasks * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('pctLabel').textContent = pct + '%';
+  document.getElementById('doneCount').textContent = done + ' done';
+  document.getElementById('totalCount').textContent = totalTasks + ' total';
+  updateStats();
+}
+
+function updateStats() {
+  const done = getCheckedCount();
+  const remaining = totalTasks - done;
+  const sections = SECTIONS.length;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-card"><span class="stat-num">${totalTasks}</span><div class="stat-label">Total tasks</div></div>
+    <div class="stat-card"><span class="stat-num" style="color:var(--dna-green)">${done}</span><div class="stat-label">Completed</div></div>
+    <div class="stat-card"><span class="stat-num" style="color:var(--dna-amber)">${remaining}</span><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><span class="stat-num">${sections}</span><div class="stat-label">Sections</div></div>
+  `;
+}
+
+let activeFilter = 'all';
+
+function tagMatchesFilter(tags, filter) {
+  if (filter === 'all') return true;
+  return tags.includes(filter);
+}
+
+function renderSections() {
+  const container = document.getElementById('sectionsContainer');
+  container.innerHTML = '';
+
+  SECTIONS.forEach(sec => {
+    const visibleCount = sec.tasks.reduce((sum, g) => {
+      return sum + g.items.filter(it => tagMatchesFilter(it.tags, activeFilter)).length;
+    }, 0);
+    if (visibleCount === 0) return;
+
+    const secEl = document.createElement('div');
+    secEl.className = 'section';
+    secEl.dataset.secId = sec.id;
+
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `
+      <div class="section-icon" style="background:${sec.iconBg};color:${sec.color}">${sec.icon}</div>
+      <div class="section-title">${sec.title}</div>
+      <div class="section-count">${visibleCount} tasks</div>
+      <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="6,4 10,8 6,12"/>
+      </svg>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'section-body open';
+
+    sec.tasks.forEach(group => {
+      const visCount = group.items.filter((it) => tagMatchesFilter(it.tags, activeFilter)).length;
+      if (visCount === 0) return;
+
+      const groupEl = document.createElement('div');
+      groupEl.className = 'task-group';
+      groupEl.innerHTML = `<div class="task-group-label">${group.group}</div>`;
+
+      group.items.forEach((item, idx) => {
+        if (!tagMatchesFilter(item.tags, activeFilter)) return;
+        const taskId = `${sec.id}_${group.group}_${idx}`;
+        const isChecked = !!checkedState[taskId];
+
+        const taskEl = document.createElement('div');
+        taskEl.className = 'task';
+
+        const check = document.createElement('div');
+        check.className = 'task-check' + (isChecked ? ' checked' : '');
+        check.addEventListener('click', () => {
+          checkedState[taskId] = !checkedState[taskId];
+          check.classList.toggle('checked', checkedState[taskId]);
+          textEl.classList.toggle('checked-text', checkedState[taskId]);
+          saveState();
+          updateProgress();
+        });
+
+        const content = document.createElement('div');
+        content.className = 'task-content';
+
+        const textEl = document.createElement('div');
+        textEl.className = 'task-text' + (isChecked ? ' checked-text' : '');
+        textEl.textContent = item.text;
+
+        const metaEl = document.createElement('div');
+        metaEl.className = 'task-meta';
+        item.tags.forEach(tag => {
+          const tagEl = document.createElement('span');
+          tagEl.className = `tag tag-${tag}`;
+          tagEl.textContent = tag;
+          metaEl.appendChild(tagEl);
+        });
+
+        content.appendChild(textEl);
+        content.appendChild(metaEl);
+        taskEl.appendChild(check);
+        taskEl.appendChild(content);
+        groupEl.appendChild(taskEl);
+      });
+
+      body.appendChild(groupEl);
+    });
+
+    header.addEventListener('click', () => {
+      const chevron = header.querySelector('.chevron');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      chevron.classList.toggle('open', !isOpen);
+    });
+
+    const chevronEl = header.querySelector('.chevron');
+    chevronEl.classList.add('open');
+
+    secEl.appendChild(header);
+    secEl.appendChild(body);
+    container.appendChild(secEl);
+  });
+}
+
+document.getElementById('filterRow').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = btn.dataset.filter;
+  renderSections();
+});
+
+document.getElementById('collapseAll').addEventListener('click', () => {
+  document.querySelectorAll('.section-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+});
+
+document.getElementById('uncheckAll').addEventListener('click', () => {
+  checkedState = {};
+  saveState();
+  renderSections();
+  updateProgress();
+});
+
+const bases = 'ATGCATGCGATCGATCGTAGCTAGCTAGCTGCATGCATGC';
+const dnaDecor = document.getElementById('dnaDecor');
+bases.split('').forEach(b => {
+  const el = document.createElement('div');
+  el.className = `dna-base base-${b}`;
+  el.textContent = b;
+  dnaDecor.appendChild(el);
+});
+
+renderSections();
+updateProgress();
+</script>

@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  /* GenAlign bioluminescence theme tokens (spec) */
+  --bg-deep: #050E1A;
+  --bg-surface: #0C1A2E;
+  --bg-card: #112038;
+  --accent-teal: #1BFFB8;
+  --accent-green: #00E676;
+  --accent-amber: #FFB700;
+  --accent-coral: #FF5C57;
+  --base-A: #1BFFB8;
+  --base-T: #FFB700;
+  --base-G: #957FEF;
+  --base-C: #FF5C57;
+  --match-green: #00E676;
+  --mismatch-red: #FF5C57;
+  --gap-amber: #FFB700;
+  --text-primary: #E8F5F0;
+  --text-muted: #6B8FA8;
+  --border-dim: rgba(27, 255, 184, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(27, 255, 184, 0.4); border-radius: 999px; }
+
+/* DP Table cell animations */
+@keyframes cell-fill {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.dp-cell-animate {
+  animation: cell-fill 0.12s ease forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Theme motion — GenAlign spec */
+@keyframes genalign-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.genalign-enter-shell-1 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.genalign-enter-shell-2 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+.genalign-enter-shell-3 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+}
+
+.genalign-enter-panel-1 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.genalign-enter-panel-2 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+.genalign-enter-panel-3 {
+  animation: genalign-fade-up 400ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+}
+
+@keyframes seq-char-reveal {
+  from { opacity: 0; filter: blur(2px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+.seq-char-reveal {
+  animation: seq-char-reveal 120ms ease forwards;
+}
+
+/* Hover / colour transitions (≤200ms; interactive hovers ~150ms via duration-150 on links/buttons) */
+.theme-transition,
+button,
+a,
+input,
+select,
+textarea,
+label.cursor-pointer {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .genalign-enter-shell-1,
+  .genalign-enter-shell-2,
+  .genalign-enter-shell-3,
+  .genalign-enter-panel-1,
+  .genalign-enter-panel-2,
+  .genalign-enter-panel-3,
+  .seq-char-reveal {
+    animation: none !important;
+  }
+}
