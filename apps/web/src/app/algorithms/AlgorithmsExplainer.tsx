@@ -18,13 +18,47 @@ function KatexBlock({ tex }: { tex: string }) {
   }, [tex]);
   return (
     <div
-      className="overflow-x-auto rounded-xl border border-[var(--border-dim)] bg-[var(--bg-deep)] px-3 py-3 text-[var(--text-primary)] [&_.katex]:text-[0.92em]"
+      className="overflow-x-auto rounded-xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--bg-deep)_92%,transparent)] px-3 py-3 text-[var(--text-primary)] [&_.katex]:text-[0.92em]"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }
 
 type DemoKind = 'nw' | 'sw' | 'hirschberg' | 'gotoh' | 'banded';
+
+/** Match home `page.tsx` section + algorithm card headings */
+const sectionHeading =
+  'border-b border-[var(--card-border)] pb-2 font-mono text-xl font-semibold uppercase tracking-widest text-[var(--heading-cheer)]';
+
+/** Same cheer + rule as section blocks, without uppercase (long diagram titles). */
+const diagramHeading =
+  'border-b border-[var(--card-border)] pb-2 font-mono text-base font-semibold tracking-wide text-[var(--heading-cheer)] sm:text-lg';
+
+const pageTitle =
+  'border-b border-[var(--card-border)] pb-3 font-mono text-2xl font-semibold uppercase tracking-widest text-[var(--heading-accent)] sm:text-3xl';
+
+const algoCardTitle =
+  'text-lg font-bold text-[color-mix(in_srgb,var(--accent-mint)_88%,var(--accent-lime))]';
+
+/** Same glass panel treatment as home hero (`page.tsx` heroPanel). */
+const introPanel =
+  'rounded-3xl border border-[color-mix(in_srgb,var(--card-border)_50%,transparent)] bg-[color-mix(in_srgb,var(--bg-card)_52%,transparent)] px-6 py-8 shadow-[0_16px_48px_-12px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:px-10 sm:py-10';
+
+const introBodyShadow =
+  '[text-shadow:0_1px_2px_rgba(0,0,0,0.55),0_0_14px_rgba(12,28,22,0.35)]';
+
+const algoCardShell =
+  'rounded-2xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--card-bg)_92%,transparent)] shadow-[inset_0_1px_0_var(--card-shine)] backdrop-blur-sm';
+
+const demoTagClass: Record<DemoKind, string> = {
+  nw: 'text-[var(--accent-mint)] border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-rose)_12%,transparent)]',
+  sw: 'text-[var(--accent-teal)] border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-green)_10%,transparent)]',
+  hirschberg:
+    'text-[var(--accent-lime)] border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,transparent)]',
+  gotoh: 'text-[var(--accent-mint)] border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-rose)_12%,transparent)]',
+  banded:
+    'text-[var(--accent-lime)] border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-amber)_10%,transparent)]',
+};
 
 function MiniAlignDemo({ kind, title }: { kind: DemoKind; title: string }) {
   const toast = useToastStore((s) => s.push);
@@ -76,10 +110,10 @@ function MiniAlignDemo({ kind, title }: { kind: DemoKind; title: string }) {
   }, [a, b, kind, toast]);
 
   return (
-    <div className="rounded-xl border border-[var(--border-dim)] bg-[var(--bg-deep)] p-4 space-y-3">
-      <div className="text-[10px] font-mono uppercase tracking-wide text-[var(--accent-teal)]">{title}</div>
+    <div className={`${algoCardShell} space-y-3 rounded-xl p-4`}>
+      <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent-lime)]">{title}</div>
       <div className="grid gap-2 sm:grid-cols-2">
-        <label className="text-xs text-[var(--text-muted)] space-y-1 block">
+        <label className="block space-y-1 text-xs text-[var(--text-secondary)]">
           Seq A
           <input
             value={a}
@@ -87,7 +121,7 @@ function MiniAlignDemo({ kind, title }: { kind: DemoKind; title: string }) {
             className="w-full rounded-lg bg-[var(--bg-card)] border border-[var(--border-dim)] px-2 py-1.5 font-mono text-xs text-[var(--text-primary)]"
           />
         </label>
-        <label className="text-xs text-[var(--text-muted)] space-y-1 block">
+        <label className="block space-y-1 text-xs text-[var(--text-secondary)]">
           Seq B
           <input
             value={b}
@@ -106,7 +140,7 @@ function MiniAlignDemo({ kind, title }: { kind: DemoKind; title: string }) {
       </button>
       {err && <p className="text-[11px] text-[color:var(--accent-coral)] font-mono">{err}</p>}
       {res && (
-        <div className="text-[11px] font-mono space-y-1 border-t border-[var(--border-dim)] pt-3 text-[var(--text-muted)]">
+        <div className="space-y-1 border-t border-[var(--card-border)] pt-3 font-mono text-[11px] text-[var(--text-secondary)]">
           <div>
             Score <span className="text-[var(--accent-teal)] tabular-nums">{res.score}</span> ·{' '}
             {res.elapsed_ms.toFixed(2)} ms · {res.peak_memory_kb} KB
@@ -245,11 +279,11 @@ function LineageSvg() {
   const byId = Object.fromEntries(nodes.map((n) => [n.id, n])) as Record<string, (typeof nodes)[0]>;
 
   return (
-    <section className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 space-y-4">
-      <h2 className="text-lg font-bold text-[var(--text-primary)] font-[var(--font-display)] italic">
+    <section className={`${algoCardShell} space-y-4 rounded-2xl p-6`}>
+      <h2 className={`max-w-4xl ${diagramHeading}`}>
         Lineage: LCS → edit distance → pairwise alignment
       </h2>
-      <p className="text-sm text-[var(--text-muted)] max-w-3xl leading-relaxed">
+      <p className="max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]">
         Longest Common Subsequence ignores mismatches cost structure; converting to edit distance adds substitution costs. Pairwise biological alignment
         generalises further with scoring matrices and affine gaps. The diagram is schematic—many textbook derivations show NW as the score-maximising
         analogue of edit distance on sequences.
@@ -332,24 +366,24 @@ const comparisonRows = [
 export default function AlgorithmsExplainer() {
   return (
     <div className="space-y-12">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] font-[var(--font-display)] italic tracking-tight">
-          Algorithms
-        </h1>
-        <p className="text-[var(--text-muted)] max-w-2xl text-sm leading-relaxed">
+      <header className={`${introPanel} space-y-5`}>
+        <h1 className={pageTitle}>Algorithms</h1>
+        <p
+          className={`max-w-2xl text-pretty text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base ${introBodyShadow}`}
+        >
           Publication context, recurrence relations (KaTeX), complexity, and a toy runner per implementation. These mirror the modes available on the Align
           page.
         </p>
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch">
           <Link
             href="/align"
-            className="px-4 py-2 rounded-xl bg-[var(--accent-teal)]/20 text-[var(--accent-teal)] border border-[var(--border-dim)] font-semibold text-sm duration-150 hover:border-[var(--accent-teal)]/40"
+            className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--accent-teal)_22%,transparent)] px-5 py-2.5 text-center text-sm font-semibold text-[var(--accent-teal)] shadow-[inset_0_1px_0_var(--card-shine)] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--accent-teal)_45%,var(--card-border))] sm:min-w-[11rem] sm:flex-none"
           >
             Open Align tool
           </Link>
           <Link
             href="/benchmark"
-            className="px-4 py-2 rounded-xl bg-[var(--bg-card)] border border-[var(--border-dim)] text-[var(--text-primary)] font-semibold text-sm hover:border-[var(--accent-teal)]/35 duration-150"
+            className="inline-flex min-h-[42px] flex-1 items-center justify-center rounded-xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--card-bg)_78%,transparent)] px-5 py-2.5 text-center text-sm font-semibold text-[var(--text-primary)] shadow-[inset_0_1px_0_var(--card-shine)] transition-colors duration-150 hover:border-[color-mix(in_srgb,var(--accent-teal)_35%,var(--card-border))] sm:min-w-[11rem] sm:flex-none"
           >
             Benchmarks & complexity
           </Link>
@@ -360,69 +394,66 @@ export default function AlgorithmsExplainer() {
 
       <section className="grid gap-6 lg:grid-cols-2">
         {cards.map((c) => (
-          <article
-            key={c.name}
-            className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)]/90 p-6 space-y-4 flex flex-col"
-          >
+          <article key={c.name} className={`${algoCardShell} flex flex-col space-y-4 rounded-2xl p-6`}>
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div>
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">{c.name}</h2>
-                <p className="text-xs text-[var(--text-muted)] mt-1 font-mono">{c.authors}</p>
+                <h2 className={algoCardTitle}>{c.name}</h2>
+                <p className="mt-1 font-mono text-xs text-[var(--text-secondary)]">{c.authors}</p>
               </div>
-              <span className="text-[10px] px-2 py-1 rounded-full bg-[var(--accent-teal)]/12 border border-[var(--accent-teal)]/35 text-[var(--accent-teal)] font-mono shrink-0 uppercase tracking-wide">
+              <span
+                className={`shrink-0 rounded-sm px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${demoTagClass[c.demo]}`}
+              >
                 {c.type}
               </span>
             </div>
             <div className="space-y-2">
               {c.paragraphs.map((p, i) => (
-                <p key={i} className="text-sm text-[var(--text-muted)] leading-relaxed">
+                <p key={i} className="text-sm leading-relaxed text-[var(--text-secondary)]">
                   {p}
                 </p>
               ))}
             </div>
             <KatexBlock tex={c.tex} />
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-xl border border-[var(--border-dim)] bg-[var(--bg-deep)] p-3">
-                <div className="text-[10px] uppercase tracking-wide text-[var(--text-muted)]">Time</div>
+              <div className="rounded-xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--bg-deep)_88%,transparent)] p-3">
+                <div className="text-[10px] font-medium uppercase tracking-wide text-[var(--accent-teal)]">Time</div>
                 <div className="font-mono text-[var(--text-primary)] mt-1">{c.time}</div>
               </div>
-              <div className="rounded-xl border border-[var(--border-dim)] bg-[var(--bg-deep)] p-3">
-                <div className="text-[10px] uppercase tracking-wide text-[var(--text-muted)]">Space</div>
+              <div className="rounded-xl border border-[var(--card-border)] bg-[color-mix(in_srgb,var(--bg-deep)_88%,transparent)] p-3">
+                <div className="text-[10px] font-medium uppercase tracking-wide text-[var(--accent-teal)]">Space</div>
                 <div className="font-mono text-[var(--text-primary)] mt-1">{c.space}</div>
               </div>
             </div>
-            <div className="text-[11px] text-[var(--text-muted)] font-mono">Journal landmark · {c.year}</div>
+            <div className="font-mono text-[11px] text-[var(--text-secondary)]">Journal landmark · {c.year}</div>
             <MiniAlignDemo kind={c.demo} title={`Try · ${c.name}`} />
           </article>
         ))}
       </section>
 
-      <section className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 overflow-x-auto">
-        <h2 className="text-lg font-bold text-[var(--text-primary)] font-[var(--font-display)] italic mb-4">
-          Comparison
-        </h2>
+      <section className={`${algoCardShell} overflow-x-auto rounded-2xl p-6`}>
+        <h2 className={`${sectionHeading} mb-4`}>Comparison</h2>
         <table className="w-full text-sm border-collapse min-w-[720px]">
           <thead>
-            <tr className="border-b border-[var(--border-dim)] text-left">
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--accent-teal)]">Algorithm</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Type</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Gap model</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Space</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Time</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Best for</th>
-              <th className="py-3 px-3 font-mono text-[10px] uppercase text-[var(--text-muted)]">Worst for</th>
+            <tr className="border-b border-[var(--card-border)] text-left">
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--accent-teal)]">Algorithm</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Type</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Gap model</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Space</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Time</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Best for</th>
+              <th className="px-3 py-3 font-mono text-[10px] uppercase text-[var(--text-secondary)]">Worst for</th>
             </tr>
           </thead>
           <tbody>
             {comparisonRows.map((r) => (
-              <tr key={r.algo} className="border-b border-[var(--border-dim)]/60 hover:bg-[var(--bg-surface)]/80">
-                <td className="py-3 px-3 font-mono text-[var(--text-primary)] font-medium">{r.algo}</td>
-                <td className="py-3 px-3 text-[var(--text-muted)]">{r.type}</td>
-                <td className="py-3 px-3 text-[var(--text-muted)]">{r.gap}</td>
-                <td className="py-3 px-3 font-mono text-[var(--text-muted)]">{r.space}</td>
-                <td className="py-3 px-3 font-mono text-[var(--text-muted)]">{r.time}</td>
-                <td className="py-3 px-3 text-[var(--text-muted)]">{r.best}</td>
-                <td className="py-3 px-3 text-[var(--text-muted)]">{r.worst}</td>
+              <tr key={r.algo} className="border-b border-[var(--card-border)]/60 hover:bg-[color-mix(in_srgb,var(--bg-surface)_55%,transparent)]">
+                <td className="px-3 py-3 font-mono font-medium text-[var(--text-primary)]">{r.algo}</td>
+                <td className="px-3 py-3 text-[var(--text-secondary)]">{r.type}</td>
+                <td className="px-3 py-3 text-[var(--text-secondary)]">{r.gap}</td>
+                <td className="px-3 py-3 font-mono text-[var(--text-secondary)]">{r.space}</td>
+                <td className="px-3 py-3 font-mono text-[var(--text-secondary)]">{r.time}</td>
+                <td className="px-3 py-3 text-[var(--text-secondary)]">{r.best}</td>
+                <td className="px-3 py-3 text-[var(--text-secondary)]">{r.worst}</td>
               </tr>
             ))}
           </tbody>

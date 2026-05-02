@@ -1,41 +1,91 @@
 @import "tailwindcss";
 
 :root {
-  /* CANA Theme tokens */
-  --bg-deep: #0D1C12;
-  --bg-surface: #162E1E;
-  --bg-card: #1E3F29;
-  --accent-teal: #4CAF50;
-  --accent-green: #81C784;
-  --accent-amber: #FFB700;
-  --accent-coral: #E53935;
-  --base-A: #A5D6A7;
-  --base-T: #FFB700;
-  --base-G: #81C784;
-  --base-C: #E53935;
-  --match-green: #4CAF50;
-  --mismatch-red: #E53935;
-  --gap-amber: #FFB700;
-  --text-primary: #F5FFF8;
-  --text-muted: #A5D6A7;
-  --border-dim: rgba(76, 175, 80, 0.2);
+  /* Page base: lime-forward forest (lime is here, not on DNA bases in 3D) */
+  --bg-deep: #24301f;
+  --bg-surface: #2f3d24;
+  --bg-card: #3a4a2e;
+  --bg-elevated: #455738;
+  /* Panels / cards — slightly cooler + rosier than page bg */
+  --card-bg: color-mix(in srgb, var(--bg-card) 88%, #f8fafc 6%);
+  --card-bg-hover: color-mix(in srgb, var(--bg-elevated) 75%, #fef2f2 8%);
+  --card-border: color-mix(in srgb, var(--border-dim) 75%, var(--border-rose) 25%);
+  --card-shine: rgba(255, 255, 255, 0.04);
+  --skeleton-stroke: color-mix(in srgb, var(--border-dim) 55%, transparent);
+  --skeleton-fill: color-mix(in srgb, var(--bg-card) 40%, transparent);
+  --tint-cream: rgba(255, 252, 248, 0.11);
+  --tint-mint: rgba(217, 249, 157, 0.22);
+  --tint-rose: rgba(254, 202, 202, 0.12);
+  --tint-coral: rgba(252, 165, 165, 0.1);
+  --glow-zenith: rgba(190, 242, 100, 0.38);
+  --glow-crimson: rgba(248, 113, 113, 0.18);
+
+  --accent-teal: #5eead4;
+  --accent-green: #4ade80;
+  --accent-mint: #d1fae5;
+  --accent-lime: #bef264;
+  --accent-amber: #fcd34d;
+  --accent-coral: #f87171;
+  --accent-rose: #fb7185;
+
+  --base-A: #86efac;
+  --base-T: #fbbf24;
+  --base-G: #4ade80;
+  --base-C: #f87171;
+  --match-green: #22c55e;
+  --mismatch-red: #ef4444;
+  --gap-amber: #f59e0b;
+
+  /* Contrast tuned for lighter green base */
+  --text-primary: #f7faf8;
+  --text-secondary: #dce8df;
+  --text-muted: #7aa896;
+  --border-dim: rgba(167, 243, 208, 0.32);
+  --border-rose: rgba(252, 165, 165, 0.28);
+  /* Section / explainer headings — cheerful, not flat white */
+  --heading-cheer: #ecfccb;
+  --heading-accent: color-mix(in srgb, var(--accent-lime) 72%, var(--accent-teal));
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html {
   background-color: var(--bg-deep);
+  background-image: radial-gradient(ellipse 120% 70% at 50% -15%, var(--glow-zenith), transparent 52%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, var(--glow-crimson), transparent 48%),
+    radial-gradient(ellipse 45% 35% at 0% 85%, var(--tint-coral), transparent 42%);
+}
+
+body {
+  position: relative;
+  background-color: transparent;
   color: var(--text-primary);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
 }
 
+/* Soft wash above the DNA layer, below app chrome (z-10) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: radial-gradient(ellipse 85% 55% at 100% 85%, var(--tint-cream), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 0% 28%, var(--tint-mint), transparent 50%),
+    radial-gradient(ellipse 55% 50% at 8% 92%, var(--tint-rose), transparent 46%),
+    radial-gradient(ellipse 40% 38% at 92% 12%, var(--tint-coral), transparent 40%);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(76, 175, 80, 0.4); border-radius: 999px; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(74, 222, 128, 0.55), rgba(248, 113, 113, 0.45));
+  border-radius: 999px;
+}
 
 /* DP Table cell animations */
 @keyframes cell-fill {

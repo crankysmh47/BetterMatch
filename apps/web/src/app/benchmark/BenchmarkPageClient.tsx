@@ -78,6 +78,7 @@ function rowMeanMem(
 export default function BenchmarkPageClient() {
   const [rows, setRows] = useState<BenchmarkRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [jobBusy, setJobBusy] = useState(false);
   const [jobProgress, setJobProgress] = useState(0);
   const [jobMsg, setJobMsg] = useState<string | null>(null);
@@ -97,9 +98,12 @@ export default function BenchmarkPageClient() {
 
   const load = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const data = await api.getBenchmark();
       setRows(data.rows ?? []);
+    } catch (e: unknown) {
+      setLoadError(e instanceof Error ? e.message : 'Failed to connect to backend.');
     } finally {
       setLoading(false);
     }
@@ -423,7 +427,7 @@ export default function BenchmarkPageClient() {
   return (
     <div className="space-y-10">
       <header className="space-y-3">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] font-[var(--font-display)] italic">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] font-mono uppercase tracking-widest">
           Benchmark & complexity
         </h1>
         <p className="text-[var(--text-muted)] max-w-2xl text-sm leading-relaxed">
@@ -435,21 +439,21 @@ export default function BenchmarkPageClient() {
             type="button"
             disabled={jobBusy}
             onClick={() => void runLive()}
-            className="px-4 py-2 rounded-xl bg-[var(--accent-teal)]/20 text-[var(--accent-teal)] border border-[var(--border-dim)] disabled:opacity-40 text-sm font-medium"
+            className="px-4 py-2 rounded-sm bg-[var(--accent-teal)]/20 text-[var(--accent-teal)] border border-[var(--border-dim)] disabled:opacity-40 text-xs font-mono uppercase tracking-wider"
           >
             Run live benchmark
           </button>
           <button
             type="button"
             onClick={() => void load()}
-            className="px-4 py-2 rounded-xl border border-[var(--border-dim)] bg-[var(--bg-card)] text-[var(--text-primary)] text-sm"
+            className="px-4 py-2 rounded-sm border border-[var(--border-dim)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs font-mono uppercase tracking-wider hover:bg-white/5"
           >
             Refresh data
           </button>
           <button
             type="button"
             onClick={exportCsv}
-            className="px-4 py-2 rounded-xl border border-[var(--border-dim)] bg-[var(--bg-card)] text-[var(--text-primary)] text-sm"
+            className="px-4 py-2 rounded-sm border border-[var(--border-dim)] bg-[var(--bg-card)] text-[var(--text-primary)] text-xs font-mono uppercase tracking-wider hover:bg-white/5"
           >
             Download CSV
           </button>
@@ -471,8 +475,17 @@ export default function BenchmarkPageClient() {
         )}
         {!jobBusy && jobMsg && <p className="text-sm text-[var(--accent-amber)]">{jobMsg}</p>}
       </header>
+      
+      {/* Backend connection error banner */}
+      {loadError && (
+        <div className="border border-red-500/30 bg-red-500/10 rounded-sm p-4 font-mono text-xs text-red-400 space-y-1">
+          <p className="uppercase tracking-widest font-bold">Backend Offline</p>
+          <p>{loadError}</p>
+          <p className="text-slate-500">Start the API service (<code>docker-compose up</code> from the repo root), then click Refresh data.</p>
+        </div>
+      )}
 
-      <section className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 space-y-4">
+      <section className="rounded-sm border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 space-y-4">
         <div className="flex flex-wrap gap-3 items-center">
           <span className="text-[10px] font-mono uppercase text-[var(--text-muted)]">Toggle series</span>
           {(Object.keys(visible) as VisibleKey[]).map((k) => (
@@ -506,8 +519,8 @@ export default function BenchmarkPageClient() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 space-y-4">
-        <h2 className="font-bold text-[var(--text-primary)] font-[var(--font-display)] italic">Banded NW vs bandwidth</h2>
+      <section className="rounded-sm border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 space-y-4">
+        <h2 className="font-bold text-[var(--text-primary)] font-mono uppercase tracking-widest text-lg">Banded NW vs bandwidth</h2>
         <p className="text-sm text-[var(--text-muted)] max-w-3xl">
           Slice at sequence length <span className="font-mono text-[var(--text-primary)]">{bandedAnalysis.target}</span>. Compare banded runs across{' '}
           <span className="font-mono">k ∈ {'{'}50, 100, 200, 500{'}'}</span> plus full NW. Missing bars mean that job has not completed yet.
@@ -532,8 +545,8 @@ export default function BenchmarkPageClient() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 overflow-x-auto">
-        <h2 className="font-bold text-[var(--text-primary)] mb-4">Results table</h2>
+      <section className="rounded-sm border border-[var(--border-dim)] bg-[var(--bg-card)] p-6 overflow-x-auto">
+        <h2 className="font-bold text-[var(--text-primary)] font-mono uppercase tracking-widest text-lg mb-4">Results table</h2>
         <table className="w-full text-sm border-collapse min-w-[640px]">
           <thead>
             <tr className="border-b border-[var(--border-dim)]">

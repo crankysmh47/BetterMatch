@@ -3,13 +3,13 @@
 import type { SVGProps } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { dnaBaseTextClass } from '@/lib/dna-colors';
+import BetterMatchLogo from '@/components/ui/BetterMatchLogo';
 
 const links = [
+  { href: '/', label: 'Home' },
   { href: '/align', label: 'Align' },
   { href: '/algorithms', label: 'Algorithms' },
   { href: '/benchmark', label: 'Benchmark' },
-  { href: '/about', label: 'About' },
 ];
 
 function GitHubIcon(props: SVGProps<SVGSVGElement>) {
@@ -23,52 +23,46 @@ function GitHubIcon(props: SVGProps<SVGSVGElement>) {
 export default function Navbar() {
   const pathname = usePathname();
   return (
-    <nav className="border-b border-[var(--border-dim)] bg-[var(--bg-surface)]/70 backdrop-blur-[12px] sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 h-14">
+    <nav className="sticky top-0 z-50 border-b border-[var(--card-border)] bg-[color-mix(in_srgb,var(--bg-surface)_78%,var(--card-bg)_22%)] shadow-[0_1px_0_color-mix(in_srgb,var(--accent-mint)_14%,transparent),0_0_40px_-12px_color-mix(in_srgb,var(--accent-rose)_18%,transparent)] backdrop-blur-[14px]">
+      <div className="mx-auto flex h-14 min-w-0 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex flex-wrap items-center gap-2 font-semibold text-lg tracking-tight duration-150 transition-opacity hover:opacity-95 shrink-0"
+          className="flex min-w-0 shrink items-center gap-2 text-lg font-semibold tracking-tight transition-opacity duration-150 hover:opacity-95 sm:gap-2.5"
         >
-          <span className="font-[var(--font-display)] font-bold text-[var(--accent-green)]">BetterMatch</span>
-          <span className="text-xs text-[var(--text-muted)] font-normal ml-1 hidden sm:inline font-mono">
-            Medical genetics.
+          {/* Isolate glow/ring from flex clipping; slight padding so drop-shadow isn’t cropped at viewport */}
+          <span className="relative isolate shrink-0 p-1.5 -m-1.5 sm:p-2 sm:-m-2">
+            <BetterMatchLogo size={38} className="rounded-lg ring-2 ring-emerald-400/50 drop-shadow-[0_0_12px_rgba(74,222,128,0.85)]" />
           </span>
-          <span className="hidden md:inline-flex font-mono text-[10px] tracking-wider gap-px ml-1" aria-hidden>
-            {'ATGCATGC'.split('').map((b, i) => (
-              <span key={i} className={dnaBaseTextClass(b) || 'text-[var(--text-muted)]'}>
-                {b}
-              </span>
-            ))}
+          <span className="truncate font-[var(--font-display)] font-bold text-[var(--accent-green)]">BetterMatch</span>
+          <span className="hidden min-w-0 truncate font-mono text-xs font-normal text-[var(--text-secondary)] lg:inline">
+            Sequence alignment lab
           </span>
         </Link>
 
-        <div className="flex justify-center min-w-0 overflow-x-auto scrollbar-thin">
-          <div className="flex gap-0.5 sm:gap-1">
-            {links.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors duration-150 ${
-                  pathname === href
-                    ? 'text-[var(--accent-green)] underline underline-offset-8 decoration-[var(--accent-green)]'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5'
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto overflow-y-visible pl-2 sm:gap-1.5 sm:pl-4 md:gap-2">
+          {links.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`inline-flex h-10 shrink-0 items-center justify-center rounded-lg px-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-150 sm:px-4 ${
+                pathname === href
+                  ? 'text-[var(--accent-mint)] underline decoration-[color-mix(in_srgb,var(--accent-mint)_70%,transparent)] underline-offset-8'
+                  : 'text-[var(--text-muted)] hover:bg-[var(--tint-cream)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+          <a
+            href="https://github.com/crankysmh47/bettermatch"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[var(--text-muted)] transition-colors duration-150 hover:bg-[var(--tint-cream)] hover:text-[var(--accent-green)]"
+            aria-label="GitHub repository"
+          >
+            <GitHubIcon className="h-5 w-5" />
+          </a>
         </div>
-
-        <a
-          href="https://github.com/crankysmh47/bettermatch"
-          target="_blank"
-          rel="noreferrer"
-          className="text-[var(--text-muted)] hover:text-[var(--accent-green)] p-2 shrink-0 justify-self-end duration-150"
-          aria-label="GitHub repository"
-        >
-          <GitHubIcon className="w-5 h-5" />
-        </a>
       </div>
     </nav>
   );
