@@ -2,6 +2,8 @@
 
 An educational “white-box” web application for biological sequence alignment, built as a DAA (Design and Analysis of Algorithms) project.
 
+**Live Deployment:**    [GenAlign](https://genalign.vercel.app/)
+
 ## Repository layout
 
 ```
