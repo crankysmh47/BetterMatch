@@ -1,7 +1,11 @@
 """FastAPI integration tests via httpx.AsyncClient + ASGITransport (≥10 cases)."""
 
+import asyncio
+
 import pytest
 from httpx import ASGITransport, AsyncClient
+
+import algorithms.benchmark_store as benchmark_store
 
 from main import app
 
@@ -146,6 +150,40 @@ async def test_benchmark_table_shape(client: AsyncClient):
     r = await client.get("/api/benchmark")
     assert r.status_code == 200
     assert "rows" in r.json()
+
+
+@pytest.mark.asyncio
+async def test_benchmark_run_sync_returns_rows(client: AsyncClient, monkeypatch):
+    monkeypatch.setattr(benchmark_store, "LENGTHS", [12])
+    benchmark_store.JOBS.clear()
+    benchmark_store.LAST_BENCHMARK_ROWS.clear()
+    r = await client.post("/api/benchmark/run-sync")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "done"
+    assert isinstance(body["rows"], list)
+    assert len(body["rows"]) > 0
+
+
+@pytest.mark.asyncio
+async def test_benchmark_job_poll_until_done(client: AsyncClient, monkeypatch):
+    monkeypatch.setattr(benchmark_store, "LENGTHS", [14])
+    benchmark_store.JOBS.clear()
+    r = await client.post("/api/benchmark/run")
+    assert r.status_code == 200
+    job_id = r.json()["job_id"]
+    for _ in range(400):
+        jr = await client.get(f"/api/benchmark/job/{job_id}")
+        assert jr.status_code == 200
+        body = jr.json()
+        if body["status"] == "done":
+            assert isinstance(body["rows"], list)
+            assert len(body["rows"]) > 0
+            return
+        if body["status"] == "error":
+            pytest.fail(body.get("error") or "benchmark error")
+        await asyncio.sleep(0.05)
+    pytest.fail("benchmark job did not finish")
 
 
 @pytest.mark.asyncio

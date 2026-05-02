@@ -26,6 +26,11 @@ export type BenchmarkJob = {
   error?: string | null;
 };
 
+export type BenchmarkSyncResult = {
+  status: string;
+  rows: BenchmarkRow[];
+};
+
 /** FastAPI base URL including `/api`, e.g. http://localhost:8000/api or https://….hf.space/api */
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api';
 
@@ -73,6 +78,9 @@ export const api = {
 
   getBenchmark: () => request<{ rows: BenchmarkRow[] }>('/benchmark'),
   runBenchmark: () => request<{ job_id: string }>('/benchmark/run', { method: 'POST', body: '{}' }),
+  /** Same benchmark work as run/poll but one HTTP round-trip (needed behind multi-replica proxies). */
+  runBenchmarkSync: () =>
+    request<BenchmarkSyncResult>('/benchmark/run-sync', { method: 'POST', body: '{}' }),
   getBenchmarkJob: (id: string) => request<BenchmarkJob>(`/benchmark/job/${id}`),
 
   /** Browser-only alignment history (no NestJS). Optionally pair with Supabase later. */

@@ -137,7 +137,8 @@ pytest -v --cov=algorithms --cov-config=.coveragerc --cov-fail-under=90
 | POST | `/api/align/all` | NW + SW + HB bundle (length limit enforced) |
 | POST | `/api/parse/fasta` | Multipart FASTA parse |
 | GET | `/api/benchmark` | Benchmark rows |
-| POST | `/api/benchmark/run` | Start benchmark job |
+| POST | `/api/benchmark/run` | Start benchmark job (async + poll; weak behind multi-replica proxies) |
+| POST | `/api/benchmark/run-sync` | Run full benchmark in one request (**used by the web UI**; Spaces-safe) |
 | GET | `/api/benchmark/job/{id}` | Poll job |
 | GET | `/api/matrices` | Matrix metadata |
 

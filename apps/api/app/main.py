@@ -15,7 +15,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, model_validator
 
 from algorithms import banded, gotoh, hirschberg, needleman_wunsch, smith_waterman
-from algorithms.benchmark_store import JOBS, LAST_BENCHMARK_ROWS, run_benchmark_job
+from algorithms.benchmark_store import (
+    JOBS,
+    LAST_BENCHMARK_ROWS,
+    materialize_benchmark_to_global_store,
+    run_benchmark_job,
+)
 from algorithms.scoring import MATRICES, MatrixName, get_matrix
 
 app = FastAPI(
@@ -416,6 +421,16 @@ def benchmark_table():
 def benchmark_run():
     job_id = run_benchmark_job()
     return {"job_id": job_id}
+
+
+@app.post("/api/benchmark/run-sync", tags=["Benchmark"])
+def benchmark_run_sync():
+    """Single-request benchmark (no polling). Required for multi-replica hosts (e.g. HF Spaces)."""
+    try:
+        rows = materialize_benchmark_to_global_store()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    return {"status": "done", "rows": rows}
 
 
 @app.get("/api/benchmark/job/{job_id}", tags=["Benchmark"])

@@ -26,6 +26,7 @@ In **Space Settings → Variables**:
 | Name | Example | Purpose |
 |------|---------|---------|
 | `CORS_ORIGINS` | `https://your-app.vercel.app` | Comma-separated allowed browser origins. **Required for production** so the Vercel app can call the API with credentials-safe CORS. Leave unset for open `*` (dev only). |
+| `BENCHMARK_LENGTHS` | `100,250,500,1000` | CSV of lengths for synthetic benchmarks. Huge values **OOM** small containers. The UI calls **`POST /api/benchmark/run-sync`** (one request); async `run` + poll can hit **different replicas** on Spaces (`Unknown job_id`). |
 
 Optional local dev: run `uvicorn` from `apps/api/app` on port `8000` instead.
 

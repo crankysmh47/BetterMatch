@@ -350,24 +350,17 @@ export default function BenchmarkPageClient() {
 
   const runLive = async () => {
     setJobBusy(true);
-    setJobProgress(4);
-    setJobMsg('Starting benchmark job…');
+    setJobProgress(8);
+    setJobMsg('Running benchmark (single request)…');
     try {
-      const { job_id } = await api.runBenchmark();
-      for (let i = 0; i < 600; i++) {
-        setJobProgress(Math.min(94, 4 + Math.round((i / 600) * 90)));
-        const job = await api.getBenchmarkJob(job_id);
-        if (job.status === 'done') {
-          setJobProgress(100);
-          setJobMsg('Benchmark finished.');
-          await load();
-          break;
-        }
-        if (job.status === 'error') {
-          setJobMsg(job.error ?? 'Benchmark failed');
-          break;
-        }
-        await new Promise((r) => setTimeout(r, 500));
+      const { status, rows } = await api.runBenchmarkSync();
+      if (status === 'done' && rows?.length) {
+        setJobProgress(100);
+        setJobMsg('Benchmark finished.');
+        // HF Spaces may load-balance GET /api/benchmark to another replica with empty cache — use this payload.
+        setRows(rows);
+      } else {
+        setJobMsg('Benchmark returned no rows.');
       }
     } catch (e: unknown) {
       setJobMsg(e instanceof Error ? e.message : 'Benchmark error');
