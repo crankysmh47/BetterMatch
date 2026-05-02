@@ -29,9 +29,9 @@ export default function Navbar() {
           href="/"
           className="flex flex-wrap items-center gap-2 font-semibold text-lg tracking-tight duration-150 transition-opacity hover:opacity-95 shrink-0"
         >
-          <span className="font-[var(--font-display)] italic text-[var(--accent-teal)]">GenAlign</span>
+          <span className="font-[var(--font-display)] font-bold text-[var(--accent-green)]">BetterMatch</span>
           <span className="text-xs text-[var(--text-muted)] font-normal ml-1 hidden sm:inline font-mono">
-            Where sequences meet.
+            Medical genetics.
           </span>
           <span className="hidden md:inline-flex font-mono text-[10px] tracking-wider gap-px ml-1" aria-hidden>
             {'ATGCATGC'.split('').map((b, i) => (
@@ -50,7 +50,7 @@ export default function Navbar() {
                 href={href}
                 className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors duration-150 ${
                   pathname === href
-                    ? 'text-[var(--accent-teal)] underline underline-offset-8 decoration-[var(--accent-teal)]'
+                    ? 'text-[var(--accent-green)] underline underline-offset-8 decoration-[var(--accent-green)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5'
                 }`}
               >
@@ -61,10 +61,10 @@ export default function Navbar() {
         </div>
 
         <a
-          href="https://github.com/"
+          href="https://github.com/crankysmh47/bettermatch"
           target="_blank"
           rel="noreferrer"
-          className="text-[var(--text-muted)] hover:text-[var(--accent-teal)] p-2 shrink-0 justify-self-end duration-150"
+          className="text-[var(--text-muted)] hover:text-[var(--accent-green)] p-2 shrink-0 justify-self-end duration-150"
           aria-label="GitHub repository"
         >
           <GitHubIcon className="w-5 h-5" />

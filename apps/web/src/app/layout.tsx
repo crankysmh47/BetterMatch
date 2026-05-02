@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
-import { Fraunces, IBM_Plex_Mono, Outfit } from 'next/font/google';
+import { Space_Grotesk, IBM_Plex_Mono, Outfit } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/ui/Footer';
 import ToastViewport from '@/components/ui/ToastViewport';
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
-const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display' });
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono' });
 
 export const metadata: Metadata = {
-  title: 'GenAlign — Sequence Alignment Platform',
+  title: 'BetterMatch — Sequence Alignment Platform',
   description:
     'Where sequences meet. Educational white-box visualizer for sequence alignment algorithms.',
   icons: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${outfit.variable} ${fraunces.variable} ${ibmPlexMono.variable} min-h-screen bg-[var(--bg-deep)] text-[var(--text-primary)] font-sans theme-transition`}>
+      <body className={`${outfit.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} min-h-screen bg-[var(--bg-deep)] text-[var(--text-primary)] font-sans theme-transition`}>
         <div className="genalign-enter-shell-1">
           <Navbar />
         </div>
